@@ -1,13 +1,14 @@
-import { ApiUnitService } from './services/api-unit.service';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
+import { ManageFoodComponent } from './components/manage-food/manage-food.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    ManageFoodComponent
   ],
   imports: [
     BrowserModule,

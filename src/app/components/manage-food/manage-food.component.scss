@@ -1,0 +1,13 @@
+@import "../../../style-variables.scss";
+
+:host {
+  // for debugging only
+  // border: 1px solid blue;
+
+  display:grid
+}
+
+.heading {
+  display: grid;
+  padding: $top-padding $side-padding 0 $side-padding;
+}
