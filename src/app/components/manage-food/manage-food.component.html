@@ -3,9 +3,44 @@
 </div>
 <div class="foods">
   <ng-container *ngFor="let no of [0,1,2,3,4,5,6,7,8,9]">
-    <mat-card class="foods__item" *ngFor="let food of foods">
-      <google-chart [type]="myType" [data]="myData" [options]="myOptions"></google-chart>
-      {{no + food.name}}
+    <mat-card class="food" *ngFor="let food of foods">
+      <mat-card-title>{{no + food.name}}</mat-card-title>
+      <mat-card-content class="food__content">
+        <div class="food__chart">
+          <google-chart [type]="myType" [data]="myData" [options]="myOptions"></google-chart>
+        </div>
+        <div class="food__macros">
+          <!-- Fat -->
+          <span class="food__macro-heading-fat">Fat</span>
+          <span>1g</span>
+          <span>10 cal (25%)</span>
+          <span></span>
+
+          <div class="divider"></div>
+          <div class="divider"></div>
+          <div class="divider"></div>
+          <span></span>
+
+
+          <!-- Carbs -->
+          <span class="food__macro-heading-carbs">Carbs</span>
+          <span>4g</span>
+          <span>20 cal (22%)</span>
+          <span></span>
+
+          <div class="divider"></div>
+          <div class="divider"></div>
+          <div class="divider"></div>
+          <span></span>
+
+          <!-- Protein -->
+          <span class="food__macro-heading-protein">Protein</span>
+          <span>100g</span>
+          <span>1 cal (2%)</span>
+          <span></span>
+        </div>
+
+      </mat-card-content>
     </mat-card>
   </ng-container>
 </div>

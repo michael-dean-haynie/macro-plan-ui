@@ -19,6 +19,40 @@
   grid-column-gap: 1rem;
 }
 
+.food__content {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-gap: 1em;
+
+}
+
+.food__macros {  
+  position: relative;
+  display: grid;
+  grid-template-columns: auto auto auto 1fr;
+  grid-template-rows: auto auto auto auto auto 1fr;
+  grid-column-gap: 1em;
+
+  font-size: 0.9em;
+}
+
+.food__macro-heading-fat {
+  font-weight: bold;
+  color: $fat-color;
+}
+.food__macro-heading-carbs {
+  font-weight: bold;
+  color: $carbs-color;
+}
+.food__macro-heading-protein {
+  font-weight: bold;
+  color: $protein-color;
+}
+
+.divider {
+  border-bottom: 1px solid rgba(0,0,0,.4);
+}
+
 // 2 column bp
 @media (min-width: 750px){
   .foods{

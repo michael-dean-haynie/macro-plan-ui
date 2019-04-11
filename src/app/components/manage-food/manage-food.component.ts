@@ -12,17 +12,24 @@ export class ManageFoodComponent implements OnInit {
   foods: Food[];
   myType = 'PieChart';
   myData = [
-    ['carbs', 1],
-    ['fat', 2],
-    ['protein', 3]
+    ['Fat', 1],
+    ['Carbs', 2],
+    ['Protein', 3],
   ];
   myOptions = {
+    // legend: {
+    //   position: 'right', alignment: 'center', textStyle: {
+    //     fontSize: 12
+    //   }
+    // },
     legend: 'none',
-    pieHole: 0.25,
+    pieSliceText: 'none',
     width: 100,
     height: 100,
-    chartArea: { left: '12%', top: '12%', width: '76%', height: '76%' },
-    tooltip: { trigger: 'selection' }
+    chartArea: { left: '0', top: '0', height: '100%', width: '100%' },
+    // tooltip: { trigger: 'selection' }
+    tooltip: { trigger: 'none' },
+    enableInteractivity: false
   };
 
   constructor(private apiFoodService: ApiFoodService) { }
