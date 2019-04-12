@@ -62,6 +62,10 @@ export class ManageFoodComponent implements OnInit {
       // },
       legend: 'none',
       pieSliceText: 'none',
+      // pieSliceText: 'label',
+      // pieSliceTextStyle: {
+      //   fontSize: 10
+      // },
       width: 100,
       height: 100,
       chartArea: { left: '0', top: '0', height: '100%', width: '100%' },
