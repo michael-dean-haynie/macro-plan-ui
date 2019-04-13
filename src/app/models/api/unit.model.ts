@@ -1,6 +1,6 @@
-import { UnitEnum } from './../enums/unit.enum';
-import { UnitTypeEnum } from './../enums/unit-type.enum';
-import { UnitSystemEnum } from './../enums/unit-system.enum';
+import { UnitEnum } from '../../enums/unit.enum';
+import { UnitTypeEnum } from '../../enums/unit-type.enum';
+import { UnitSystemEnum } from '../../enums/unit-system.enum';
 
 export interface Unit {
   id: number;

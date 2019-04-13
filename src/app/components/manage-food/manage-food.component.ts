@@ -1,7 +1,8 @@
+import { FoodSortableField } from '../../models/food-sortable-field';
 import { HelperFoodService } from './../../services/helper-food.service';
 import { Component, OnInit } from '@angular/core';
 import { SortDirectionEnum } from 'src/app/enums/sort-direction.enum';
-import { Food } from 'src/app/models/food.model';
+import { Food } from 'src/app/models/api/food.model';
 import { ApiFoodService } from './../../services/api-food.service';
 
 @Component({
@@ -14,10 +15,29 @@ export class ManageFoodComponent implements OnInit {
   chartDataMap = {};
   chartOptions = this.buildChartOptions();
 
+  // Sorting
+  foodSortableFields: FoodSortableField[];
+  activeSortField: string;
+  SortDirectionEnum = SortDirectionEnum; // make it available to tempalte for comparisons
+  activeSortDirection: SortDirectionEnum = SortDirectionEnum.ASC;
+
+  // Searching
+  searchTerm = '';
+
+
   constructor(private apiFoodService: ApiFoodService, private helperFoodService: HelperFoodService) { }
 
   ngOnInit() {
-    this.apiFoodService.getFoods('', 'name', SortDirectionEnum.ASC)
+    // Store sortable fields on food (after sorting alpha asc). Set default sort field (name)
+    this.foodSortableFields = this.apiFoodService.foodSortableFields
+      .sort((a, b) => a.displayName.toLowerCase().localeCompare(b.displayName.toLocaleLowerCase()));
+    this.activeSortField = 'name';
+
+    this.loadFoods();
+  }
+
+  loadFoods(): void {
+    this.apiFoodService.getFoods(this.searchTerm, this.activeSortField, this.activeSortDirection)
       .subscribe(foods => {
         this.foods = foods;
 
@@ -29,6 +49,23 @@ export class ManageFoodComponent implements OnInit {
         });
 
       });
+  }
+
+  onSearchSubmit(event: Event) {
+    event.preventDefault();
+    this.loadFoods();
+  }
+
+  onSortFieldSelected(sortField: string): void {
+    this.activeSortField = sortField;
+    this.loadFoods();
+  }
+
+  toggleSortDirection(): void {
+    this.activeSortDirection =
+      (this.activeSortDirection === SortDirectionEnum.ASC ? SortDirectionEnum.DESC : SortDirectionEnum.ASC);
+
+    this.loadFoods();
   }
 
   getCalsFromFat(grams: number): number {

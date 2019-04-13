@@ -1,4 +1,4 @@
-import { Unit } from './../models/unit.model';
+import { Unit } from '../models/api/unit.model';
 import { environment } from './../../environments/environment';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';

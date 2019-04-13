@@ -1,5 +1,33 @@
-<div class="heading">
+<div class="heading mat-elevation-z6">
   <h1>Manage Food</h1>
+</div>
+<div class="search-bar" (submit)="onSearchSubmit($event)">
+  <span>
+    <form>
+      <input type="search" name="search" placeholder="Search" [(ngModel)]="searchTerm">
+      <button type="submit">Search</button>
+    </form>
+  </span>
+  <span>
+    <mat-menu #appMenu="matMenu">
+      <button mat-menu-item *ngFor="let field of foodSortableFields" [disabled]="activeSortField === field.apiName"
+        (click)="onSortFieldSelected(field.apiName)">
+        {{field.displayName}}
+      </button>
+    </mat-menu>
+
+    <button mat-icon-button [matMenuTriggerFor]="appMenu">
+      <i class="material-icons">sort</i>
+    </button>
+  </span>
+  <span>
+    <button mat-icon-button>
+      <i *ngIf="activeSortDirection === SortDirectionEnum.ASC" (click)="toggleSortDirection()"
+        class="material-icons">arrow_upward</i>
+      <i *ngIf="activeSortDirection === SortDirectionEnum.DESC" (click)="toggleSortDirection()"
+        class="material-icons">arrow_downward</i>
+    </button>
+  </span>
 </div>
 <div class="foods">
   <ng-container *ngFor="let no of [0,1,2,3,4,5,6,7,8,9]">
