@@ -11,19 +11,38 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatTableModule } from '@angular/material/table';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { RouterModule, Routes } from '@angular/router';
 import { GoogleChartsModule } from 'angular-google-charts';
 import { AppComponent } from './app.component';
+import { ManageFoodDetailsComponent } from './components/manage-food-details/manage-food-details.component';
 import { ManageFoodComponent } from './components/manage-food/manage-food.component';
+
+const appRoutes: Routes = [
+  {
+    path: 'manage-food', component: ManageFoodComponent
+  },
+  {
+    path: '',
+    redirectTo: '/manage-food',
+    pathMatch: 'full'
+  },
+  // { path: '**', component: PageNotFoundComponent }
+];
 
 @NgModule({
   declarations: [
     AppComponent,
-    ManageFoodComponent
+    ManageFoodComponent,
+    ManageFoodDetailsComponent,
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     FormsModule,
+    RouterModule.forRoot(
+      appRoutes,
+      // { enableTracing: true } // <-- debugging purposes only
+    ),
 
     // Google Charts
     GoogleChartsModule,
