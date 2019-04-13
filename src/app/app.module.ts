@@ -22,6 +22,9 @@ const appRoutes: Routes = [
     path: 'manage-food', component: ManageFoodComponent
   },
   {
+    path: 'manage-food/:id', component: ManageFoodDetailsComponent
+  },
+  {
     path: '',
     redirectTo: '/manage-food',
     pathMatch: 'full'

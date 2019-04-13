@@ -1,6 +1,3 @@
-<div class="heading mat-elevation-z6">
-  <h1>Manage Food</h1>
-</div>
 <div class="search-bar" (submit)="onSearchSubmit($event)">
   <form class="search-bar__search-form">
     <input class="search-bar__input" type="search" name="search" placeholder="Search" [(ngModel)]="searchTerm"
@@ -34,7 +31,7 @@
   </div>
 </div>
 <div class="foods">
-  <mat-card matRipple class="food" *ngFor="let food of foods">
+  <mat-card *ngFor="let food of foods" class="food" (click)="onFoodSelected(food.id)">
     <mat-card-title>
       {{food.name}}
       &nbsp;-&nbsp;

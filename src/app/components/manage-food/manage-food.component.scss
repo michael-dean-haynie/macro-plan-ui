@@ -8,15 +8,6 @@ $three-col-bp: 1050px;
 $one-col-card-bp: 450px;
 $three-col-card-bp: 1420px;
 
-
-
-.heading {
-  display: grid;
-  padding: $top-padding $side-padding 0 $side-padding;
-  background-color: $heading-background;
-  color: white
-}
-
 .search-bar {
   display: grid;
   grid-template-columns: 1fr auto auto;

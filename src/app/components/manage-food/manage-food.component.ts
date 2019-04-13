@@ -1,9 +1,10 @@
-import { FoodSortableField } from '../../models/food-sortable-field';
-import { HelperFoodService } from './../../services/helper-food.service';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { SortDirectionEnum } from 'src/app/enums/sort-direction.enum';
 import { Food } from 'src/app/models/api/food.model';
+import { FoodSortableField } from '../../models/food-sortable-field';
 import { ApiFoodService } from './../../services/api-food.service';
+import { HelperFoodService } from './../../services/helper-food.service';
 
 @Component({
   selector: 'app-manage-food',
@@ -26,7 +27,7 @@ export class ManageFoodComponent implements OnInit {
   searchResultsMessage = '';
 
 
-  constructor(private apiFoodService: ApiFoodService, private helperFoodService: HelperFoodService) { }
+  constructor(private router: Router, private apiFoodService: ApiFoodService, private helperFoodService: HelperFoodService) { }
 
   ngOnInit() {
     // Store sortable fields on food (after sorting alpha asc). Set default sort field (name)
@@ -68,6 +69,10 @@ export class ManageFoodComponent implements OnInit {
       (this.activeSortDirection === SortDirectionEnum.ASC ? SortDirectionEnum.DESC : SortDirectionEnum.ASC);
 
     this.loadFoods();
+  }
+
+  onFoodSelected(id: number): void {
+    this.router.navigate(['manage-food', id]);
   }
 
   getCalsFromFat(grams: number): number {

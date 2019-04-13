@@ -1,0 +1,15 @@
+@import "../style-variables.scss";
+
+.heading {
+  position: fixed;
+  background-color: $heading-background;
+  color: white;
+  display: grid;
+  width:100%;
+  padding: $top-padding $side-padding 0 $side-padding;
+  z-index: 1; // <-- if unset or less than 1, mat components float over it on scroll
+}
+
+.fixed-wrapper {
+  height:100%;
+}
