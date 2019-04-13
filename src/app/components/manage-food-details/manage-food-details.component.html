@@ -1,3 +1,108 @@
-<p>
-  manage-food-details works!
-</p>
+<ng-container *ngIf="!loading">
+  <mat-card>
+    <mat-card-title>
+      <h2>Update Food Item</h2>
+    </mat-card-title>
+    <form [formGroup]="foodForm" (ngSubmit)="onSubmit()">
+      <mat-card-content>
+        <div class="field-groups">
+
+          <!-- Branding -->
+          <mat-expansion-panel [expanded]="true">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Branding
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+
+            <div class="branding-fields">
+              <mat-form-field>
+                <input matInput placeholder="Name" formControlName="name" required>
+                <!-- <mat-error *ngIf="email.invalid">{{getErrorMessage()}}</mat-error> -->
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput placeholder="Brand" formControlName="brand">
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput placeholder="Style/Flavor" formControlName="styleOrFlavor">
+              </mat-form-field>
+            </div>
+          </mat-expansion-panel>
+
+          <!-- Serving Size -->
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Serving Size
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+
+            <div formArrayName="measurements" class="serving-sizes">
+              <div *ngFor="let mmtFg of getMeasurementsFormGroups(); let i=index;">
+                <div [formGroupName]="i">
+
+                  <mat-form-field>
+                    <mat-label>Favorite food</mat-label>
+                    <mat-select>
+                      <mat-option *ngFor="let unit of getUnitsOfType(mmtFg.controls['unitType'].value)" [value]="unit">
+                        {{unit}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+
+
+
+                  <!-- <mat-form-field>
+                    <mat-label>Unit</mat-label>
+                    <mat-select formControlName="unit">
+                      <mat-optgroup *ngFor="let group of pokemonGroups" [label]="group.name"
+                        [disabled]="group.disabled">
+                        <mat-option *ngFor="let pokemon of group.pokemon" [value]="pokemon.value">
+                          {{pokemon.viewValue}}
+                        </mat-option>
+                      </mat-optgroup>
+                    </mat-select>
+                  </mat-form-field> -->
+
+
+                  <!-- <span>{{i}}</span>
+                  <input formControlName="value">
+                  <input formControlName="unit">
+                  <input formControlName="unitType"> -->
+                </div>
+              </div>
+            </div>
+          </mat-expansion-panel>
+
+          <!-- Nutrition -->
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Nutrition
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+
+            <div class="nutrition-fields">
+              <mat-form-field>
+                <input matInput type="number" placeholder="Calories" formControlName="calories" required>
+                <!-- <mat-error *ngIf="email.invalid">{{getErrorMessage()}}</mat-error> -->
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput type="number" placeholder="Fat (grams)" formControlName="fat" required>
+                <!-- <mat-error *ngIf="email.invalid">{{getErrorMessage()}}</mat-error> -->
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput type="number" placeholder="Carbs (grams)" formControlName="carbs" required>
+                <!-- <mat-error *ngIf="email.invalid">{{getErrorMessage()}}</mat-error> -->
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput type="number" placeholder="Protein (grams)" formControlName="protein" required>
+                <!-- <mat-error *ngIf="email.invalid">{{getErrorMessage()}}</mat-error> -->
+              </mat-form-field>
+            </div>
+          </mat-expansion-panel>
+        </div>
+      </mat-card-content>
+    </form>
+  </mat-card>
+</ng-container>

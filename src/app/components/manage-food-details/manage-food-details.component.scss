@@ -1,0 +1,29 @@
+@import "../../../style-variables.scss";
+
+$two-col-bp: 500px;
+$three-col-bp: 850px;
+
+.field-groups {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-row-gap: 1rem;
+  padding-top:1rem;
+}
+
+.branding-fields, .nutrition-fields {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-gap: 1rem;
+
+  @media (min-width: $two-col-bp) {
+    grid-template-columns: 1fr 1fr;
+  }
+  @media (min-width: $three-col-bp) {
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 2rem;
+  }
+}
+
+.serving-sizes {
+  display: grid;
+}

@@ -25,6 +25,11 @@ export class ApiFoodService {
 
   constructor(private http: HttpClient) { }
 
+  public getFood(id: number): Observable<Food> {
+    const options = {};
+    return this.http.get<Food>(`${this.baseUrl}/${id}`, options);
+  }
+
   public getFoods(searchTerm: string, sortField: string, sortDirection: SortDirectionEnum): Observable<Food[]> {
     const options = {
       params: new HttpParams()
