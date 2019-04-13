@@ -23,6 +23,7 @@ export class ManageFoodComponent implements OnInit {
 
   // Searching
   searchTerm = '';
+  searchResultsMessage = '';
 
 
   constructor(private apiFoodService: ApiFoodService, private helperFoodService: HelperFoodService) { }
@@ -48,6 +49,7 @@ export class ManageFoodComponent implements OnInit {
           this.chartDataMap[food.id] = this.prepareChartData(food);
         });
 
+        this.updateSearchResultsMessage();
       });
   }
 
@@ -79,6 +81,10 @@ export class ManageFoodComponent implements OnInit {
   }
   getMacroPercentage(macro: string, food: Food) {
     return this.helperFoodService.getMacroPercentage(macro, food);
+  }
+
+  private updateSearchResultsMessage(): void {
+    this.searchResultsMessage = `${this.foods.length} results found (${!this.searchTerm ? 'empty search' : '"' + this.searchTerm + '"'})`;
   }
 
   // TODO: add type safety? Array<Array<string | number | {}>>,

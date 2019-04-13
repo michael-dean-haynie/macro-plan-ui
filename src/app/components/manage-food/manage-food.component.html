@@ -2,12 +2,13 @@
   <h1>Manage Food</h1>
 </div>
 <div class="search-bar" (submit)="onSearchSubmit($event)">
-  <span>
-    <form>
-      <input type="search" name="search" placeholder="Search" [(ngModel)]="searchTerm">
-      <button type="submit">Search</button>
-    </form>
-  </span>
+  <form class="search-bar__search-form">
+    <input class="search-bar__input" type="search" name="search" placeholder="Search" [(ngModel)]="searchTerm"
+      autocomplete="off">
+    <button mat-raised-button type="submit" class="search-bar__submit">
+      <i class="material-icons">search</i>
+    </button>
+  </form>
   <span>
     <mat-menu #appMenu="matMenu">
       <button mat-menu-item *ngFor="let field of foodSortableFields" [disabled]="activeSortField === field.apiName"
@@ -28,61 +29,62 @@
         class="material-icons">arrow_downward</i>
     </button>
   </span>
+  <div class="search-bar__results">
+    <span>{{searchResultsMessage}}</span>
+  </div>
 </div>
 <div class="foods">
-  <ng-container *ngFor="let no of [0,1,2,3,4,5,6,7,8,9]">
-    <mat-card matRipple class="food" *ngFor="let food of foods">
-      <mat-card-title>
-        {{no + food.name}}
-        &nbsp;-&nbsp;
-        {{food.styleOrFlavor}}
-      </mat-card-title>
-      <mat-card-subtitle>{{food.brand}}</mat-card-subtitle>
-      <mat-card-content class="food__content">
-        <div class="food__content">
-          <div class="food__chart">
-            <google-chart [type]="'PieChart'" [data]="chartDataMap[food.id]" [options]="chartOptions">
-            </google-chart>
-          </div>
-          <span class="food__text-data">
-            <span class="food__macros">
-              <!-- Fat -->
-              <span class="food__data-heading-fat">Fat</span>
-              <span></span> <!-- col spacer with row border -->
-              <span>{{food.fat}}g</span>
-              <span></span> <!-- col spacer with row border -->
-              <span>{{getCalsFromFat(food.fat)}} cal ({{getMacroPercentage('fat', food)}}%)</span>
-
-              <!-- Carbs -->
-              <span class="food__data-heading-carbs">Carbs</span>
-              <span></span> <!-- col spacer with row border -->
-              <span>{{food.carbs}}g</span>
-              <span></span> <!-- col spacer with row border -->
-              <span>{{getCalsFromCarbs(food.carbs)}} cal ({{getMacroPercentage('carbs', food)}}%)</span>
-
-              <!-- Protein -->
-              <span class="food__data-heading-protein">Protein</span>
-              <span></span> <!-- col spacer with row border -->
-              <span>{{food.protein}}g</span>
-              <span></span> <!-- col spacer with row border -->
-              <span>{{getCalsFromProtein(food.protein)}} cal ({{getMacroPercentage('protein', food)}}%)</span>
-            </span>
-            <div>
-              <div>
-                <span class="food__data-heading-calories">Calories:</span>
-                &nbsp;
-                {{food.calories}}
-              </div>
-              <!-- TODO: make a pipe that formats a serving size? -->
-              <div>
-                <span class="food__data-heading-serving-size">Serving Size:</span>
-                &nbsp;
-                {{food.measurements[0].value + ' ' + food.measurements[0].unit.abbreviation}}
-              </div>
-            </div>
-          </span>
+  <mat-card matRipple class="food" *ngFor="let food of foods">
+    <mat-card-title>
+      {{food.name}}
+      &nbsp;-&nbsp;
+      {{food.styleOrFlavor}}
+    </mat-card-title>
+    <mat-card-subtitle>{{food.brand}}</mat-card-subtitle>
+    <mat-card-content class="food__content">
+      <div class="food__content">
+        <div class="food__chart">
+          <google-chart [type]="'PieChart'" [data]="chartDataMap[food.id]" [options]="chartOptions">
+          </google-chart>
         </div>
-      </mat-card-content>
-    </mat-card>
-  </ng-container>
+        <span class="food__text-data">
+          <span class="food__macros">
+            <!-- Fat -->
+            <span class="food__data-heading-fat">Fat</span>
+            <span></span> <!-- col spacer with row border -->
+            <span>{{food.fat}}g</span>
+            <span></span> <!-- col spacer with row border -->
+            <span>{{getCalsFromFat(food.fat)}} cal ({{getMacroPercentage('fat', food)}}%)</span>
+
+            <!-- Carbs -->
+            <span class="food__data-heading-carbs">Carbs</span>
+            <span></span> <!-- col spacer with row border -->
+            <span>{{food.carbs}}g</span>
+            <span></span> <!-- col spacer with row border -->
+            <span>{{getCalsFromCarbs(food.carbs)}} cal ({{getMacroPercentage('carbs', food)}}%)</span>
+
+            <!-- Protein -->
+            <span class="food__data-heading-protein">Protein</span>
+            <span></span> <!-- col spacer with row border -->
+            <span>{{food.protein}}g</span>
+            <span></span> <!-- col spacer with row border -->
+            <span>{{getCalsFromProtein(food.protein)}} cal ({{getMacroPercentage('protein', food)}}%)</span>
+          </span>
+          <div>
+            <div>
+              <span class="food__data-heading-calories">Calories:</span>
+              &nbsp;
+              {{food.calories}}
+            </div>
+            <!-- TODO: make a pipe that formats a serving size? -->
+            <div>
+              <span class="food__data-heading-serving-size">Serving Size:</span>
+              &nbsp;
+              {{food.measurements[0].value + ' ' + food.measurements[0].unit.abbreviation}}
+            </div>
+          </div>
+        </span>
+      </div>
+    </mat-card-content>
+  </mat-card>
 </div>

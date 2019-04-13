@@ -20,10 +20,43 @@ $three-col-card-bp: 1420px;
 .search-bar {
   display: grid;
   grid-template-columns: 1fr auto auto;
-  grid-column-gap: 1em;
+  grid-column-gap: .5em;
   padding: $top-padding $side-padding 0 $side-padding;
-  // background-color: $heading-background;
-  // color: white
+
+  @media (min-width: $two-col-bp) {
+    grid-column-gap: 1em;
+  }
+}
+
+.search-bar__search-form {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-column-gap: .5em;
+
+  @media (min-width: $two-col-bp) {
+    grid-column-gap: 1em;
+  }
+}
+
+.search-bar__input {
+  font-size: 1.5em;
+  padding-left: .5em;
+  display: inline;
+  width: 100%;
+}
+
+.search-bar__submit {
+  @media (max-width: $two-col-bp) {
+    min-width: initial;
+    padding-left: .5em;
+    padding-right: .5em;
+  }
+}
+
+.search-bar__results {
+  color:rgba(0,0,0,.4);
+  font-size: .75rem;
+  margin-top: .25rem;
 }
 
 .foods {
