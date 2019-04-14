@@ -1,8 +1,10 @@
+import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormArray, FormBuilder, FormGroup } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { FormArray, FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ReplaySubject } from 'rxjs';
 import { Food } from 'src/app/models/api/food.model';
+import { Measurement } from 'src/app/models/api/measurement.model';
 import { Unit } from 'src/app/models/api/unit.model';
 import { ApiFoodService } from 'src/app/services/api-food.service';
 import { HelperUnitService } from 'src/app/services/helper-unit.service';
@@ -30,6 +32,11 @@ export class ManageFoodDetailsComponent implements OnInit {
   foodForm: FormGroup;
   foodFormBuilt$ = new ReplaySubject<boolean>() // <-- will emit a value when food form has been built
 
+  // some messy ts just to list the values of an enum to be used in template
+  unitTypes: UnitTypeEnum[] = ((): UnitTypeEnum[] => {
+    const keys = Object.keys(UnitTypeEnum);
+    return keys.filter(k => isNaN(Number(k))).map(k => k as unknown as UnitTypeEnum);
+  })();
 
   // loading (will be set to true once all data needed for rendering is ready)
   loading = true;
@@ -37,6 +44,8 @@ export class ManageFoodDetailsComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
+    private location: Location,
     private fb: FormBuilder,
     private apiFoodService: ApiFoodService,
     private apiUnitService: ApiUnitService,
@@ -69,8 +78,53 @@ export class ManageFoodDetailsComponent implements OnInit {
     });
   }
 
-  // TODO save stuffz
-  onSubmit(): void { }
+  /**
+   * ----------------------------------------
+   * User Input
+   * ----------------------------------------
+   */
+
+  onClickCancel(): void {
+    this.location.back();
+  }
+
+  onSubmit(): void {
+    if (this.foodForm.valid) {
+      this.populateApiModelWithFormData();
+      this.apiFoodService.updateFood(this.food).subscribe();
+
+      this.router.navigate(['manage-food']);
+    } else {
+      // TODO: let user know
+    }
+  }
+
+  // clear value of unit select and mark touched so validation kicks in
+  onUnitTypeChange(index: number): void {
+    const unitCtrl = this.foodForm.get(['measurements', index, 'unit']);
+    unitCtrl.setValue(null);
+    unitCtrl.markAsTouched();
+
+  }
+
+  onClickDeleteMeasurement(index: number): void {
+    // TODO: use modal for confirmation first
+    const measurementsFormArray = this.foodForm.get('measurements') as FormArray;
+    measurementsFormArray.removeAt(index);
+    measurementsFormArray.markAsTouched();
+  }
+
+  onClickAddMeasurement(): void {
+    const measurementsFormArray = this.foodForm.get('measurements') as FormArray;
+    measurementsFormArray.push(this.buildDefaultMeasurement());
+    measurementsFormArray.markAsTouched();
+  }
+
+  /**
+   * ----------------------------------------
+   * Template rendering logic
+   * ----------------------------------------
+   */
 
   getMeasurementsFormGroups(): FormGroup[] {
     const formArray = this.foodForm.get('measurements') as FormArray;
@@ -80,6 +134,33 @@ export class ManageFoodDetailsComponent implements OnInit {
   getUnitsOfType(unitType: UnitTypeEnum): UnitEnum[] {
     return this.helperUnitService.getUnitsOfType(unitType, this.units);
   }
+
+  brandingSectionHasError(): boolean {
+    return [
+      this.foodForm.get('name'),
+      this.foodForm.get('brand'),
+      this.foodForm.get('styleOrFlavor')
+    ].some(ctrl => this.shouldShowError(ctrl));
+  }
+
+  servingSizeSectionHasError(): boolean {
+    return this.shouldShowError(this.foodForm.get('measurements'));
+  }
+
+  nutritionSectionHasError(): boolean {
+    return [
+      this.foodForm.get('calories'),
+      this.foodForm.get('fat'),
+      this.foodForm.get('carbs'),
+      this.foodForm.get('protein')
+    ].some(ctrl => this.shouldShowError(ctrl));
+  }
+
+  /**
+   * ----------------------------------------
+   * Private
+   * ----------------------------------------
+   */
 
   private loadFood(): void {
     this.apiFoodService.getFood(this.foodId).subscribe(food => {
@@ -103,6 +184,7 @@ export class ManageFoodDetailsComponent implements OnInit {
 
           // empty default, then load existing measurements
           this.foodForm.setControl('measurements', new FormArray([]));
+          this.foodForm.get('measurements').setValidators(Validators.required);
           this.food.measurements.forEach(mmt => {
             const mmtCtrlArray = this.foodForm.get('measurements') as FormArray;
             mmtCtrlArray.push(this.fb.group({
@@ -111,9 +193,9 @@ export class ManageFoodDetailsComponent implements OnInit {
               unit: [mmt.unit.unit],
             }));
           });
-        });
 
-        this.loading = false;
+          this.loading = false;
+        });
       }
     });
   }
@@ -128,21 +210,51 @@ export class ManageFoodDetailsComponent implements OnInit {
       carbs: [null],
       protein: [null],
       measurements: this.fb.array([
-        this.fb.group({
-          value: [null],
-          // TODO: Flatten this out
-          unit: [
-            this.fb.group({
-              unitSystem: [null],
-              unitType: [null],
-              unit: [null],
-            })
-          ]
-        })
+        this.buildDefaultMeasurement(),
+        Validators.required
       ])
     });
 
     this.foodFormBuilt$.next(true);
+  }
+
+  private buildDefaultMeasurement(): FormGroup {
+    return this.fb.group({
+      value: [1],
+      unitType: [UnitTypeEnum.VOLUME],
+      unit: [UnitEnum.CUP]
+    });
+  }
+
+  private populateApiModelWithFormData(): void {
+    // shorten for readability
+    const f = this.food;
+    const ff = this.foodForm;
+
+    f.name = ff.get('name').value;
+    f.brand = ff.get('brand').value;
+    f.styleOrFlavor = ff.get('styleOrFlavor').value;
+    f.calories = ff.get('calories').value;
+    f.fat = ff.get('fat').value;
+    f.carbs = ff.get('carbs').value;
+    f.protein = ff.get('protein').value;
+
+    const apiMmts: Measurement[] = []
+    const formMmts = ff.get('measurements') as FormArray;
+    formMmts.controls.forEach(formMmt => {
+      const apiMmt: Measurement = {
+        value: formMmt.get('value').value,
+        unit: this.helperUnitService.getUnitModelByEnum(formMmt.get('unit').value, this.units)
+      };
+
+      apiMmts.push(apiMmt);
+    });
+
+    f.measurements = apiMmts;
+  }
+
+  private shouldShowError(ctrl: AbstractControl): boolean {
+    return (!ctrl.valid) && (ctrl.touched);
   }
 
 }

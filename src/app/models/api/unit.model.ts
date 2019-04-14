@@ -3,7 +3,7 @@ import { UnitTypeEnum } from '../../enums/unit-type.enum';
 import { UnitSystemEnum } from '../../enums/unit-system.enum';
 
 export interface Unit {
-  id: number;
+  id?: number;
   unitSystem: UnitSystemEnum;
   unitType: UnitTypeEnum;
   unit: UnitEnum;

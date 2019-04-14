@@ -3,6 +3,16 @@
 $two-col-bp: 500px;
 $three-col-bp: 850px;
 
+.title-bar {
+  display: grid;
+  grid-template-columns: auto auto;
+  justify-content: space-between;
+
+  h2 {
+    margin: 0;
+  }
+}
+
 .field-groups {
   display: grid;
   grid-template-columns: 1fr;
@@ -24,6 +34,61 @@ $three-col-bp: 850px;
   }
 }
 
-.serving-sizes {
+.serving-size {
   display: grid;
+  grid-template-columns: 6em 9em 1fr 3em;
+  grid-column-gap: .5em;
+  font-size: .7em;
+
+  // css-grid is not perfect
+  // https://daverupert.com/2017/09/breaking-the-grid/
+  & > * {
+    min-width:0
+  }
+  select {
+    max-width: 100%;
+  }
+
+  // breakpoints
+  @media (min-width: 350px) {
+    font-size: .8em;
+  }
+  @media (min-width: 350px) {
+    font-size: .85em;
+  }
+  @media (min-width: 390px) {
+    font-size: .9em;
+  }
+  @media (min-width: 420px) {
+    font-size: 1em;
+  }
+  @media (min-width: 450px) {
+    grid-column-gap: 1em
+  }
+
+}
+
+.add-serving-size-row {
+  display:grid;
+  justify-items: end;
+}
+
+.submit-buttons__container {
+  margin-top: 1rem;
+  display:grid;
+  grid-template-columns: 0 100%;
+
+  @media (min-width: 500px) {
+    grid-template-columns: 1fr 30em;
+  }
+}
+
+.submit-buttons {
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  grid-column-gap: 1em;
+
+  @media (min-width: 500px) {
+    grid-template-columns: auto auto;
+  }
 }

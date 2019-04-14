@@ -1,7 +1,7 @@
 import { Unit } from './unit.model';
 
 export interface Measurement {
-  id: number;
+  id?: number;
   unit: Unit;
   value: number;
 }

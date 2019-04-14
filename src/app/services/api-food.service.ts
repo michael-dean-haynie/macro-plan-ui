@@ -30,6 +30,11 @@ export class ApiFoodService {
     return this.http.get<Food>(`${this.baseUrl}/${id}`, options);
   }
 
+  public updateFood(food: Food): Observable<Food> {
+    const options = {};
+    return this.http.put<Food>(this.baseUrl, food, options);
+  }
+
   public getFoods(searchTerm: string, sortField: string, sortDirection: SortDirectionEnum): Observable<Food[]> {
     const options = {
       params: new HttpParams()

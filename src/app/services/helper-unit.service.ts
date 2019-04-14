@@ -15,4 +15,8 @@ export class HelperUnitService {
       .filter(unit => unit.unitType === unitType)
       .map(unit => unit.unit);
   }
+
+  public getUnitModelByEnum(unitEnum: UnitEnum, units: Unit[]): Unit {
+    return units.find(unit => unit.unit === unitEnum);
+  }
 }

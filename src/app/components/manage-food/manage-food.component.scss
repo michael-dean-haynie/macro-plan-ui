@@ -98,7 +98,7 @@ mat-card-content {
     @include wide-card
   }
 
-  @media(min-width: $three-col-card-bp){
+  @media (min-width: $three-col-card-bp){
     @include wide-card
   }
 }

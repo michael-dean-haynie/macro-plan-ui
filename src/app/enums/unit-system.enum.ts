@@ -1,5 +1,5 @@
 export enum UnitSystemEnum {
-  METRIC,
-  IMPERIAL,
-  GENERIC
+  METRIC = 'METRIC',
+  IMPERIAL = 'IMPERIAL',
+  GENERIC = 'GENERIC'
 }

@@ -1,5 +1,5 @@
 export enum UnitTypeEnum {
-  MASS,
-  VOLUME,
-  ITEM
+  MASS = 'MASS',
+  VOLUME = 'VOLUME',
+  ITEM = 'ITEM'
 }
