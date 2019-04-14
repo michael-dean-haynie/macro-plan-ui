@@ -88,12 +88,18 @@ export class ManageFoodDetailsComponent implements OnInit {
     this.location.back();
   }
 
+  onClickDeleteFood(): void {
+    this.apiFoodService.deleteFood(this.foodId).subscribe(() => {
+      this.router.navigate(['manage-food']);
+    });
+  }
+
   onSubmit(): void {
     if (this.foodForm.valid) {
       this.populateApiModelWithFormData();
-      this.apiFoodService.updateFood(this.food).subscribe();
-
-      this.router.navigate(['manage-food']);
+      this.apiFoodService.updateFood(this.food).subscribe(() => {
+        this.router.navigate(['manage-food']);
+      });
     } else {
       // TODO: let user know
     }

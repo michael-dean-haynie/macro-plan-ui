@@ -1,7 +1,7 @@
 <ng-container *ngIf="!loading">
   <div class="title-bar">
-    <h2>Update Food Item</h2>
-    <button mat-raised-button (click)="onClickCancel()">Cancel</button>
+    <h2>Edit Food Item</h2>
+    <button *ngIf="!createMode" mat-raised-button (click)="onClickDeleteFood()">Delete</button>
   </div>
   <form [formGroup]="foodForm" (ngSubmit)="onSubmit()">
     <div class="field-groups">
