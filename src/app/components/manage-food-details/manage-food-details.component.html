@@ -1,7 +1,8 @@
 <ng-container *ngIf="!loading">
   <div class="title-bar">
     <h2>{{createMode ? 'New' : 'Edit' }} Food Item</h2>
-    <button *ngIf="!createMode" mat-raised-button type="button" (click)="onClickDeleteFood()">Delete</button>
+    <button *ngIf="!createMode" mat-raised-button color="warn" type="button"
+      (click)="onClickDeleteFood()">Delete</button>
   </div>
   <form [formGroup]="foodForm" (ngSubmit)="onSubmit()">
     <div class="field-groups">
@@ -28,7 +29,7 @@
       </mat-expansion-panel>
 
       <!-- Serving Size -->
-      <mat-expansion-panel>
+      <mat-expansion-panel [expanded]="true">
         <mat-expansion-panel-header>
           <mat-panel-title [class.error]="servingSizeSectionHasError()">
             Serving Size
@@ -82,7 +83,7 @@
       </mat-expansion-panel>
 
       <!-- Nutrition -->
-      <mat-expansion-panel>
+      <mat-expansion-panel [expanded]="true">
         <mat-expansion-panel-header>
           <mat-panel-title [class.error]="nutritionSectionHasError()">
             Nutrition

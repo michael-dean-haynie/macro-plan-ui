@@ -38,22 +38,6 @@ export class ManageFoodComponent implements OnInit {
     this.loadFoods();
   }
 
-  loadFoods(): void {
-    this.apiFoodService.getFoods(this.searchTerm, this.activeSortField, this.activeSortDirection)
-      .subscribe(foods => {
-        this.foods = foods;
-
-        // TODO: Fix this. For some reason when I try to bind directly to the google-chart [data] attribute
-        // using a method the browser gets stuck in some sort of infinate loop and chrome crashes.
-        // If I set it using a static value it's fine - hence the chartDataMap
-        this.foods.forEach(food => {
-          this.chartDataMap[food.id] = this.prepareChartData(food);
-        });
-
-        this.updateSearchResultsMessage();
-      });
-  }
-
   onSearchSubmit(event: Event) {
     event.preventDefault();
     this.loadFoods();
@@ -71,6 +55,10 @@ export class ManageFoodComponent implements OnInit {
     this.loadFoods();
   }
 
+  onClickNewFood(): void {
+    this.router.navigate(['manage-food', 'create']);
+  }
+
   onFoodSelected(id: number): void {
     this.router.navigate(['manage-food', id]);
   }
@@ -86,6 +74,22 @@ export class ManageFoodComponent implements OnInit {
   }
   getMacroPercentage(macro: string, food: Food) {
     return this.helperFoodService.getMacroPercentage(macro, food);
+  }
+
+  private loadFoods(): void {
+    this.apiFoodService.getFoods(this.searchTerm, this.activeSortField, this.activeSortDirection)
+      .subscribe(foods => {
+        this.foods = foods;
+
+        // TODO: Fix this. For some reason when I try to bind directly to the google-chart [data] attribute
+        // using a method the browser gets stuck in some sort of infinate loop and chrome crashes.
+        // If I set it using a static value it's fine - hence the chartDataMap
+        this.foods.forEach(food => {
+          this.chartDataMap[food.id] = this.prepareChartData(food);
+        });
+
+        this.updateSearchResultsMessage();
+      });
   }
 
   private updateSearchResultsMessage(): void {
