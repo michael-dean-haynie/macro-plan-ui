@@ -1,7 +1,7 @@
 <ng-container *ngIf="!loading">
   <div class="title-bar">
-    <h2>Edit Food Item</h2>
-    <button *ngIf="!createMode" mat-raised-button (click)="onClickDeleteFood()">Delete</button>
+    <h2>{{createMode ? 'New' : 'Edit' }} Food Item</h2>
+    <button *ngIf="!createMode" mat-raised-button type="button" (click)="onClickDeleteFood()">Delete</button>
   </div>
   <form [formGroup]="foodForm" (ngSubmit)="onSubmit()">
     <div class="field-groups">
@@ -65,7 +65,7 @@
                   <input matInput type="number" placeholder="Ammount" formControlName="value" required>
                 </mat-form-field>
 
-                <button mat-icon-button (click)="onClickDeleteMeasurement(i)">
+                <button mat-icon-button type="button" (click)="onClickDeleteMeasurement(i)">
                   <i class="material-icons">delete_outline</i>
                 </button>
 
@@ -110,7 +110,7 @@
     <div class="submit-buttons__container">
       <div class="submit-buttons__spacer"></div>
       <div class="submit-buttons">
-        <button mat-raised-button (click)="onClickCancel()">Cancel</button>
+        <button mat-raised-button type="button" (click)="onClickCancel()">Cancel</button>
         <button mat-raised-button color="primary" type="submit" [disabled]="!foodForm.valid">Save</button>
       </div>
     </div>

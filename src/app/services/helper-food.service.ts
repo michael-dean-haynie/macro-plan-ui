@@ -33,4 +33,19 @@ export class HelperFoodService {
     // TODO: switch stmt or something better
     return Math.floor(100 * (macro === 'fat' ? fatCals : macro === 'carbs' ? carbCals : proteinCals) / totalCals);
   }
+
+  getEmptyFood(): Food {
+    return {
+      id: null,
+      calories: null,
+      fat: null,
+      carbs: null,
+      protein: null,
+      name: null,
+      brand: null,
+      styleOrFlavor: null,
+      measurements: null,
+      isTemplate: true
+    }
+  }
 }

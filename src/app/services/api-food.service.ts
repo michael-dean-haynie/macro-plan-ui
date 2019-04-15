@@ -25,6 +25,11 @@ export class ApiFoodService {
 
   constructor(private http: HttpClient) { }
 
+  public createFood(food: Food): Observable<Food> {
+    const options = {};
+    return this.http.post<Food>(this.baseUrl, food, options);
+  }
+
   public getFood(id: number): Observable<Food> {
     const options = {};
     return this.http.get<Food>(`${this.baseUrl}/${id}`, options);

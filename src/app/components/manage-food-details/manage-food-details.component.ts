@@ -1,3 +1,4 @@
+import { HelperFoodService } from './../../services/helper-food.service';
 import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
@@ -49,7 +50,8 @@ export class ManageFoodDetailsComponent implements OnInit {
     private fb: FormBuilder,
     private apiFoodService: ApiFoodService,
     private apiUnitService: ApiUnitService,
-    private helperUnitService: HelperUnitService
+    private helperUnitService: HelperUnitService,
+    private helperFoodService: HelperFoodService
   ) { }
 
   ngOnInit() {
@@ -59,22 +61,28 @@ export class ManageFoodDetailsComponent implements OnInit {
       this.unitsLoaded$.next(true); // <-- emit value indicating units are loaded
     });
 
+    // build form controls
+    this.unitsLoaded$.subscribe(() => {
+      console.log('units loaded');
+      this.buildDefaultFormControls();
+    });
+
     // load food id
     this.route.params.subscribe(params => {
-      // TODO? maybe check if 'create' here?
-      this.foodId = +params['id']; // <-- convert to number
+      if (params['id'] === 'create') {
+        this.createMode = true;
+      } else {
+        this.foodId = +params['id']; // <-- convert to number
+      }
 
-      this.idLoaded$.next(true); // <-- emit value indicating idhas been
+      this.idLoaded$.next(true); // <-- emit value indicating id has been
     });
 
     // load food
     this.idLoaded$.subscribe(() => {
+      console.log('id loaded');
+      console.log(this.foodId);
       this.loadFood();
-    });
-
-    // build form controls
-    this.unitsLoaded$.subscribe(() => {
-      this.buildDefaultFormControls();
     });
   }
 
@@ -97,9 +105,17 @@ export class ManageFoodDetailsComponent implements OnInit {
   onSubmit(): void {
     if (this.foodForm.valid) {
       this.populateApiModelWithFormData();
-      this.apiFoodService.updateFood(this.food).subscribe(() => {
-        this.router.navigate(['manage-food']);
-      });
+
+      if (this.createMode) {
+        this.apiFoodService.createFood(this.food).subscribe(() => {
+          this.router.navigate(['manage-food']);
+        });
+      } else {
+        this.apiFoodService.updateFood(this.food).subscribe(() => {
+          this.router.navigate(['manage-food']);
+        });
+      }
+
     } else {
       // TODO: let user know
     }
@@ -169,66 +185,46 @@ export class ManageFoodDetailsComponent implements OnInit {
    */
 
   private loadFood(): void {
-    this.apiFoodService.getFood(this.foodId).subscribe(food => {
-      console.log(food); // TODO REMOVE
-      this.food = food;
-
-      // If we're updating (not creating) then patch form values with existing data
-      if (!this.createMode) {
-        this.foodFormBuilt$.subscribe(() => {
-          // load food data into form controls
-          this.foodForm.patchValue({
-            name: food.name,
-            brand: food.brand,
-            styleOrFlavor: food.styleOrFlavor,
-            calories: food.calories,
-            fat: food.fat,
-            carbs: food.carbs,
-            protein: food.protein,
-            // measurements set seperately
-          });
-
-          // empty default, then load existing measurements
-          this.foodForm.setControl('measurements', new FormArray([]));
-          this.foodForm.get('measurements').setValidators(Validators.required);
-          this.food.measurements.forEach(mmt => {
-            const mmtCtrlArray = this.foodForm.get('measurements') as FormArray;
-            mmtCtrlArray.push(this.fb.group({
-              value: [mmt.value],
-              unitType: [mmt.unit.unitType],
-              unit: [mmt.unit.unit],
-            }));
-          });
-
-          this.loading = false;
-        });
-      }
-    });
+    if (this.createMode) {
+      this.foodFormBuilt$.subscribe(() => {
+        this.food = this.helperFoodService.getEmptyFood();
+        this.loading = false;
+      });
+    } else {
+      this.apiFoodService.getFood(this.foodId).subscribe(food => {
+        this.food = food;
+        this.populateFormDataWithApiModel();
+      });
+    }
   }
 
-  private buildDefaultFormControls(): void {
-    this.foodForm = this.fb.group({
-      name: [''],
-      brand: [''],
-      styleOrFlavor: [''],
-      calories: [null],
-      fat: [null],
-      carbs: [null],
-      protein: [null],
-      measurements: this.fb.array([
-        this.buildDefaultMeasurement(),
-        Validators.required
-      ])
-    });
+  private populateFormDataWithApiModel(): void {
+    this.foodFormBuilt$.subscribe(() => {
+      // load food data into form controls
+      this.foodForm.patchValue({
+        name: this.food.name,
+        brand: this.food.brand,
+        styleOrFlavor: this.food.styleOrFlavor,
+        calories: this.food.calories,
+        fat: this.food.fat,
+        carbs: this.food.carbs,
+        protein: this.food.protein,
+        // measurements set seperately
+      });
 
-    this.foodFormBuilt$.next(true);
-  }
+      // empty default, then load existing measurements
+      this.foodForm.setControl('measurements', new FormArray([]));
+      this.foodForm.get('measurements').setValidators(Validators.required);
+      this.food.measurements.forEach(mmt => {
+        const mmtCtrlArray = this.foodForm.get('measurements') as FormArray;
+        mmtCtrlArray.push(this.fb.group({
+          value: [mmt.value],
+          unitType: [mmt.unit.unitType],
+          unit: [mmt.unit.unit],
+        }));
+      });
 
-  private buildDefaultMeasurement(): FormGroup {
-    return this.fb.group({
-      value: [1],
-      unitType: [UnitTypeEnum.VOLUME],
-      unit: [UnitEnum.CUP]
+      this.loading = false;
     });
   }
 
@@ -257,6 +253,42 @@ export class ManageFoodDetailsComponent implements OnInit {
     });
 
     f.measurements = apiMmts;
+  }
+
+  private buildDefaultFormControls(): void {
+    console.log('building defualt form controls');
+    this.foodForm = this.fb.group({
+      name: [''],
+      brand: [''],
+      styleOrFlavor: [''],
+      calories: [null],
+      fat: [null],
+      carbs: [null],
+      protein: [null],
+      measurements: this.fb.array(
+        [
+          this.buildDefaultMeasurement(),
+        ],
+        {
+          validators: Validators.required
+        }
+      )
+    });
+
+    console.log('default form finished building');
+    console.log(this.foodForm);
+    this.foodFormBuilt$.next(true);
+  }
+
+  private buildDefaultMeasurement(): FormGroup {
+    let foo = this.fb.group({
+      value: [1],
+      unitType: [UnitTypeEnum.VOLUME],
+      unit: [UnitEnum.CUP]
+    });
+
+    console.log(foo);
+    return foo;
   }
 
   private shouldShowError(ctrl: AbstractControl): boolean {
