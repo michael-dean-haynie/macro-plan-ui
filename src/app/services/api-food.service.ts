@@ -15,12 +15,15 @@ export class ApiFoodService {
   foodSortableFields: FoodSortableField[] = [
     { displayName: 'Calories', apiName: 'calories' },
     { displayName: 'Fat', apiName: 'fat' },
+    { displayName: 'Fat %', apiName: 'fatPercentage' },
     { displayName: 'Carbs', apiName: 'carbs' },
+    { displayName: 'Carbs %', apiName: 'carbsPercentage' },
     { displayName: 'Protein', apiName: 'protein' },
+    { displayName: 'Protein %', apiName: 'proteinPercentage' },
     { displayName: 'Name', apiName: 'name' },
     { displayName: 'Brand', apiName: 'brand' },
     { displayName: 'Style/Flavor', apiName: 'styleOrFlavor' },
-    // TODO: Add in derrived fields like percentages and maybe other stuff
+
   ];
 
   constructor(private http: HttpClient) { }
