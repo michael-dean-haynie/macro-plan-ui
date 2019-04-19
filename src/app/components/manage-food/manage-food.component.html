@@ -43,11 +43,10 @@
 <div class="foods">
   <mat-card *ngFor="let food of foods" class="food" (click)="onFoodSelected(food.id)">
     <mat-card-title>
-      {{food.name}}
-      <span *ngIf="food.styleOrFlavor">&nbsp;-&nbsp;</span>
-      {{food.styleOrFlavor}}
+      <span>{{food.name}}</span>
+      <span class="food__brand">{{food.brand}}</span>
     </mat-card-title>
-    <mat-card-subtitle>{{food.brand}}</mat-card-subtitle>
+    <mat-card-subtitle>{{food.styleOrFlavor}}</mat-card-subtitle>
     <mat-card-content class="food__content">
       <div class="food__content">
         <div class="food__chart">

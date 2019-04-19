@@ -63,8 +63,16 @@ $three-col-card-bp: 1420px;
   }
 }
 
-.food__style-or-flavor {
-  color: rgba(0,0,0,.54);
+mat-card-title{
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-column-gap: 1em;
+  justify-content: space-between;
+
+  .food__brand {
+    color: rgba(0,0,0,.54);
+    text-align: right;
+  }
 }
 
 mat-card-content {
