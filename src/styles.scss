@@ -18,18 +18,20 @@ h1,h2,h3,h4,h5,h6 {
 
 
 /* Snack Bar Styles */
-.error-snack-bar, .success-snack-bar {
-  background-color: white;
+.error-snack-bar {
+  color: black;
+  background-color: rgba(255, 0, 0, .7);
 
   .mat-simple-snackbar-action {
-    color: grey;
+    color: black;
   }
 }
 
-.error-snack-bar {
-  color: $error-color;
-}
-
 .success-snack-bar {
-  color: rgb(6, 88, 6);
+  color: white;
+  background-color: rgba(6, 88, 6, .8);
+
+  .mat-simple-snackbar-action {
+    color: white;
+  }
 }
