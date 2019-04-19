@@ -63,7 +63,6 @@ export class ManageFoodDetailsComponent implements OnInit {
 
     // build form controls
     this.unitsLoaded$.subscribe(() => {
-      console.log('units loaded');
       this.buildDefaultFormControls();
     });
 
@@ -80,8 +79,6 @@ export class ManageFoodDetailsComponent implements OnInit {
 
     // load food
     this.idLoaded$.subscribe(() => {
-      console.log('id loaded');
-      console.log(this.foodId);
       this.loadFood();
     });
   }
@@ -194,7 +191,8 @@ export class ManageFoodDetailsComponent implements OnInit {
       this.apiFoodService.getFood(this.foodId).subscribe(food => {
         this.food = food;
         this.populateFormDataWithApiModel();
-      });
+      },
+        (error) => { console.log('THERE WAS AN ERROR') });
     }
   }
 
@@ -256,7 +254,6 @@ export class ManageFoodDetailsComponent implements OnInit {
   }
 
   private buildDefaultFormControls(): void {
-    console.log('building defualt form controls');
     this.foodForm = this.fb.group({
       name: [''],
       brand: [''],
@@ -275,20 +272,15 @@ export class ManageFoodDetailsComponent implements OnInit {
       )
     });
 
-    console.log('default form finished building');
-    console.log(this.foodForm);
     this.foodFormBuilt$.next(true);
   }
 
   private buildDefaultMeasurement(): FormGroup {
-    let foo = this.fb.group({
+    return this.fb.group({
       value: [1],
       unitType: [UnitTypeEnum.VOLUME],
       unit: [UnitEnum.CUP]
     });
-
-    console.log(foo);
-    return foo;
   }
 
   private shouldShowError(ctrl: AbstractControl): boolean {
