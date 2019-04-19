@@ -12,19 +12,26 @@ import { HelperFoodService } from './../../services/helper-food.service';
   styleUrls: ['./manage-food.component.scss']
 })
 export class ManageFoodComponent implements OnInit {
+  // api results
   foods: Food[];
-  chartDataMap = {};
-  chartOptions = this.buildChartOptions();
 
-  // Sorting
+  // chart data
+  chartOptions = this.buildChartOptions();
+  chartDataMap = {};
+  chartReadyMap = {};
+
+  // sorting
   foodSortableFields: FoodSortableField[];
   activeSortField: string;
   SortDirectionEnum = SortDirectionEnum; // make it available to tempalte for comparisons
   activeSortDirection: SortDirectionEnum = SortDirectionEnum.ASC;
 
-  // Searching
+  // searching
   searchTerm = '';
   searchResultsMessage = '';
+
+  // loading (will be set to true while searches are being made)
+  loading = true;
 
 
   constructor(private router: Router, private apiFoodService: ApiFoodService, private helperFoodService: HelperFoodService) { }
@@ -77,8 +84,14 @@ export class ManageFoodComponent implements OnInit {
   }
 
   private loadFoods(): void {
+    this.foods = [];
+    this.loading = true;
+    this.chartDataMap = {};
+    this.chartReadyMap = {};
+
     this.apiFoodService.getFoods(this.searchTerm, this.activeSortField, this.activeSortDirection)
       .subscribe(foods => {
+        this.loading = false;
         this.foods = foods;
 
         // TODO: Fix this. For some reason when I try to bind directly to the google-chart [data] attribute

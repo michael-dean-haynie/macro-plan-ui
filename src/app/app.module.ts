@@ -23,6 +23,7 @@ import { DialogComponent } from './components/dialog/dialog.component';
 import { ManageFoodDetailsComponent } from './components/manage-food-details/manage-food-details.component';
 import { ManageFoodComponent } from './components/manage-food/manage-food.component';
 import { MainInterceptor } from './services/interceptors/main.interceptor';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 
 
@@ -75,7 +76,9 @@ const appRoutes: Routes = [
     MatExpansionModule,
     MatSelectModule,
     MatSnackBarModule,
-    MatDialogModule
+    MatDialogModule,
+    MatProgressSpinnerModule
+
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,

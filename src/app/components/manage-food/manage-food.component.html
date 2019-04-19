@@ -35,6 +35,11 @@
     </div>
   </div>
 </form>
+
+<div *ngIf="loading" class="loading-container">
+  <mat-spinner></mat-spinner>
+</div>
+
 <div class="foods">
   <mat-card *ngFor="let food of foods" class="food" (click)="onFoodSelected(food.id)">
     <mat-card-title>
@@ -46,7 +51,10 @@
     <mat-card-content class="food__content">
       <div class="food__content">
         <div class="food__chart">
-          <google-chart [type]="'PieChart'" [data]="chartDataMap[food.id]" [options]="chartOptions">
+          <mat-spinner *ngIf="chartReadyMap[food.id] !== true"></mat-spinner>
+          <google-chart [type]="'PieChart'" [options]="chartOptions" [data]="chartDataMap[food.id]"
+            (ready)="chartReadyMap[food.id] = true"
+            [style.display]="chartReadyMap[food.id] === true ? 'initial' : 'none'">
           </google-chart>
         </div>
         <span class="food__text-data">

@@ -42,7 +42,7 @@ export class ManageFoodDetailsComponent implements OnInit {
     return keys.filter(k => isNaN(Number(k))).map(k => k as unknown as UnitTypeEnum);
   })();
 
-  // loading (will be set to true once all data needed for rendering is ready)
+  // loading (will be set to false once all data needed for rendering is ready)
   loading = true;
 
 
