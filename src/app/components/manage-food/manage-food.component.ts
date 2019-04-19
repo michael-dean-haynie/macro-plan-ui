@@ -1,3 +1,4 @@
+import { SnackBarService } from './../../services/snack-bar.service';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { SortDirectionEnum } from 'src/app/enums/sort-direction.enum';
@@ -34,7 +35,12 @@ export class ManageFoodComponent implements OnInit {
   loading = true;
 
 
-  constructor(private router: Router, private apiFoodService: ApiFoodService, private helperFoodService: HelperFoodService) { }
+  constructor(
+    private router: Router,
+    private apiFoodService: ApiFoodService,
+    private helperFoodService: HelperFoodService,
+    private snackBarService: SnackBarService
+  ) { }
 
   ngOnInit() {
     // Store sortable fields on food (after sorting alpha asc). Set default sort field (name)
@@ -90,19 +96,21 @@ export class ManageFoodComponent implements OnInit {
     this.chartReadyMap = {};
 
     this.apiFoodService.getFoods(this.searchTerm, this.activeSortField, this.activeSortDirection)
-      .subscribe(foods => {
-        this.loading = false;
-        this.foods = foods;
+      .subscribe(
+        foods => {
+          this.loading = false;
+          this.foods = foods;
 
-        // TODO: Fix this. For some reason when I try to bind directly to the google-chart [data] attribute
-        // using a method the browser gets stuck in some sort of infinate loop and chrome crashes.
-        // If I set it using a static value it's fine - hence the chartDataMap
-        this.foods.forEach(food => {
-          this.chartDataMap[food.id] = this.prepareChartData(food);
-        });
+          // TODO: Fix this. For some reason when I try to bind directly to the google-chart [data] attribute
+          // using a method the browser gets stuck in some sort of infinate loop and chrome crashes.
+          // If I set it using a static value it's fine - hence the chartDataMap
+          this.foods.forEach(food => {
+            this.chartDataMap[food.id] = this.prepareChartData(food);
+          });
 
-        this.updateSearchResultsMessage();
-      });
+          this.updateSearchResultsMessage();
+        },
+        (error) => { this.snackBarService.showError(); });
   }
 
   private updateSearchResultsMessage(): void {

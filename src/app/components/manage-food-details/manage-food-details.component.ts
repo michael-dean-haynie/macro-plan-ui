@@ -61,10 +61,13 @@ export class ManageFoodDetailsComponent implements OnInit {
 
   ngOnInit() {
     // load units
-    this.apiUnitService.getUnits().subscribe(units => {
-      this.units = units;
-      this.unitsLoaded$.next(true); // <-- emit value indicating units are loaded
-    });
+    this.apiUnitService.getUnits().subscribe(
+      units => {
+        this.units = units;
+        this.unitsLoaded$.next(true); // <-- emit value indicating units are loaded
+      }, (error) => {
+        this.snackBarService.showError();
+      });
 
     // build form controls
     this.unitsLoaded$.subscribe(() => {
@@ -225,11 +228,12 @@ export class ManageFoodDetailsComponent implements OnInit {
         this.loading = false;
       });
     } else {
-      this.apiFoodService.getFood(this.foodId).subscribe(food => {
-        this.food = food;
-        this.populateFormDataWithApiModel();
-      },
-        (error) => { console.log('THERE WAS AN ERROR') });
+      this.apiFoodService.getFood(this.foodId).subscribe(
+        food => {
+          this.food = food;
+          this.populateFormDataWithApiModel();
+        },
+        (error) => { this.snackBarService.showError(); });
     }
   }
 
