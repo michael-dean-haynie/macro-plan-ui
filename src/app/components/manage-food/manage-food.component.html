@@ -89,7 +89,7 @@
             <div>
               <span class="food__data-heading-serving-size">Serving Size:</span>
               &nbsp;
-              {{food.measurements[0].value + ' ' + food.measurements[0].unit.abbreviation}}
+              {{food.measurements | measurements}}
             </div>
           </div>
         </span>

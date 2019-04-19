@@ -24,6 +24,7 @@ import { ManageFoodDetailsComponent } from './components/manage-food-details/man
 import { ManageFoodComponent } from './components/manage-food/manage-food.component';
 import { MainInterceptor } from './services/interceptors/main.interceptor';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MeasurementsPipe } from './pipes/measurements.pipe';
 
 
 
@@ -48,6 +49,7 @@ const appRoutes: Routes = [
     ManageFoodComponent,
     ManageFoodDetailsComponent,
     DialogComponent,
+    MeasurementsPipe,
   ],
   imports: [
     BrowserModule,
