@@ -21,6 +21,7 @@ export class MainInterceptor implements HttpInterceptor {
         },
         (error) => {
           if (error instanceof HttpErrorResponse) {
+            console.error(error);
             const response = error as HttpErrorResponse;
 
             switch (response.status) {

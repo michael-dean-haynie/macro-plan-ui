@@ -15,3 +15,21 @@ h1,h2,h3,h4,h5,h6 {
 .error {
   color: $error-color;
 }
+
+
+/* Snack Bar Styles */
+.error-snack-bar, .success-snack-bar {
+  background-color: white;
+
+  .mat-simple-snackbar-action {
+    color: grey;
+  }
+}
+
+.error-snack-bar {
+  color: $error-color;
+}
+
+.success-snack-bar {
+  color: rgb(6, 88, 6);
+}

@@ -1,3 +1,4 @@
+import { SnackBarService } from './../../services/snack-bar.service';
 import { HelperFoodService } from './../../services/helper-food.service';
 import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
@@ -51,7 +52,8 @@ export class ManageFoodDetailsComponent implements OnInit {
     private apiFoodService: ApiFoodService,
     private apiUnitService: ApiUnitService,
     private helperUnitService: HelperUnitService,
-    private helperFoodService: HelperFoodService
+    private helperFoodService: HelperFoodService,
+    private snackBarService: SnackBarService
   ) { }
 
   ngOnInit() {
@@ -94,9 +96,14 @@ export class ManageFoodDetailsComponent implements OnInit {
   }
 
   onClickDeleteFood(): void {
-    this.apiFoodService.deleteFood(this.foodId).subscribe(() => {
-      this.router.navigate(['manage-food']);
-    });
+    this.apiFoodService.deleteFood(this.foodId).subscribe(
+      () => {
+        this.snackBarService.showSuccess(`Successfully deleted "${this.food.name}"`);
+        this.router.navigate(['manage-food']);
+      },
+      (error) => {
+        this.snackBarService.showError(`Something went wrong. Could not delete "${this.food.name}"`);
+      });
   }
 
   onSubmit(): void {
@@ -104,13 +111,22 @@ export class ManageFoodDetailsComponent implements OnInit {
       this.populateApiModelWithFormData();
 
       if (this.createMode) {
-        this.apiFoodService.createFood(this.food).subscribe(() => {
-          this.router.navigate(['manage-food']);
-        });
+        this.apiFoodService.createFood(this.food).subscribe(
+          () => {
+            this.snackBarService.showSuccess(`Successfully created "${this.food.name}"`);
+            this.router.navigate(['manage-food']);
+          }, (error) => {
+            this.snackBarService.showError(`Something went wrong. Could not create "${this.food.name}"`);
+          });
       } else {
-        this.apiFoodService.updateFood(this.food).subscribe(() => {
-          this.router.navigate(['manage-food']);
-        });
+        this.apiFoodService.updateFood(this.food).subscribe(
+          () => {
+            this.snackBarService.showSuccess(`Successfully updated "${this.food.name}"`);
+            this.router.navigate(['manage-food']);
+          },
+          (error) => {
+            this.snackBarService.showError(`Something went wrong. Could not update "${this.food.name}"`);
+          });
       }
 
     } else {
