@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatRippleModule } from '@angular/material/core';
+import { MatDialogModule } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -18,6 +19,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule, Routes } from '@angular/router';
 import { GoogleChartsModule } from 'angular-google-charts';
 import { AppComponent } from './app.component';
+import { DialogComponent } from './components/dialog/dialog.component';
 import { ManageFoodDetailsComponent } from './components/manage-food-details/manage-food-details.component';
 import { ManageFoodComponent } from './components/manage-food/manage-food.component';
 import { MainInterceptor } from './services/interceptors/main.interceptor';
@@ -44,6 +46,7 @@ const appRoutes: Routes = [
     AppComponent,
     ManageFoodComponent,
     ManageFoodDetailsComponent,
+    DialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -71,13 +74,19 @@ const appRoutes: Routes = [
     MatFormFieldModule,
     MatExpansionModule,
     MatSelectModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatDialogModule
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,
     useClass: MainInterceptor,
     multi: true,
   },],
-  bootstrap: [AppComponent]
+  bootstrap: [
+    AppComponent
+  ],
+  entryComponents: [
+    DialogComponent
+  ]
 })
 export class AppModule { }

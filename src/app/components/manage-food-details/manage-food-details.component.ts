@@ -1,8 +1,8 @@
-import { SnackBarService } from './../../services/snack-bar.service';
-import { HelperFoodService } from './../../services/helper-food.service';
+import { DialogComponent } from './../dialog/dialog.component';
 import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ReplaySubject } from 'rxjs';
 import { Food } from 'src/app/models/api/food.model';
@@ -13,6 +13,8 @@ import { HelperUnitService } from 'src/app/services/helper-unit.service';
 import { UnitTypeEnum } from './../../enums/unit-type.enum';
 import { UnitEnum } from './../../enums/unit.enum';
 import { ApiUnitService } from './../../services/api-unit.service';
+import { HelperFoodService } from './../../services/helper-food.service';
+import { SnackBarService } from './../../services/snack-bar.service';
 
 @Component({
   selector: 'app-manage-food-details',
@@ -53,7 +55,8 @@ export class ManageFoodDetailsComponent implements OnInit {
     private apiUnitService: ApiUnitService,
     private helperUnitService: HelperUnitService,
     private helperFoodService: HelperFoodService,
-    private snackBarService: SnackBarService
+    private snackBarService: SnackBarService,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit() {
@@ -95,7 +98,25 @@ export class ManageFoodDetailsComponent implements OnInit {
     this.location.back();
   }
 
+
   onClickDeleteFood(): void {
+    const dialog = this.dialog.open(DialogComponent, {
+      data: {
+        title: `Delete "${this.food.name}"?`,
+        // TODO: do not let user delete food templates that are a part of a dish
+        content: 'This action cannot be undone.',
+        cancel: 'Nevermind',
+        confirm: 'Yes, Delete'
+      }
+    });
+    dialog.afterClosed().subscribe(doDelete => {
+      if (doDelete) {
+        this.onConfirmDeleteFood();
+      }
+    });
+  }
+
+  onConfirmDeleteFood(): void {
     this.apiFoodService.deleteFood(this.foodId).subscribe(
       () => {
         this.snackBarService.showSuccess(`Successfully deleted "${this.food.name}"`);
