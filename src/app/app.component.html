@@ -1,9 +1,39 @@
 <div class="mat-typography">
   <div #heading class="heading mat-elevation-z6">
-    <h1>Manage Food</h1>
+    <div>
+      <h1>Manage Food</h1>
+    </div>
+    <div>
+      <button mat-button type="button" (click)="sidenav.toggle()">
+        <i class="material-icons">menu</i>
+      </button>
+    </div>
   </div>
   <div heading__spacer [style.height]="getHeightOfHeading()+'px'"></div>
-  <div class="content">
-    <router-outlet></router-outlet>
-  </div>
+
+  <mat-sidenav-container>
+    <mat-sidenav #sidenav [position]="'end'" [fixedInViewport]="true" [fixedTopGap]="getHeightOfHeading()"
+      [autoFocus]="false">
+      <mat-list class="navigation">
+
+        <ng-container *ngFor="let nav of navItems; let i = index">
+          <mat-list-item role="navigation">
+            <button mat-button type="button" [class.active-nav]="isActiveNav(nav.path)" (click)="onNavClick(nav)">
+              {{nav.name}}
+            </button>
+          </mat-list-item>
+          <mat-divider *ngIf="i < navItems.length - 1"></mat-divider>
+        </ng-container>
+
+      </mat-list>
+    </mat-sidenav>
+    <mat-sidenav-content>
+
+      <div class="content">
+        <router-outlet></router-outlet>
+      </div>
+
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+
 </div>

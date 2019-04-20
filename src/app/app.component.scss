@@ -4,10 +4,27 @@
   position: fixed;
   background-color: $heading-background;
   color: white;
-  display: grid;
   width:100%;
-  padding: $top-padding $side-padding 0 $side-padding;
-  z-index: 1; // <-- if unset or less than 1, mat components float over it on scroll
+  box-sizing: border-box;
+  padding: $top-padding $side-padding $bottom-padding $side-padding;
+  z-index: 2; // <-- if unset or less than 2, mat components float over it on scroll
+  display: grid;
+  grid-template-columns: 1fr auto;
+}
+
+.navigation{
+  @media (min-width: 375px) {
+    width: 250px;
+  }
+}
+
+// active navs
+.navigation button.active-nav {
+  ::ng-deep{
+    .mat-button-focus-overlay {
+      opacity: .12;
+    }
+  }
 }
 
 .content {

@@ -11,7 +11,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
+import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTableModule } from '@angular/material/table';
 import { BrowserModule } from '@angular/platform-browser';
@@ -22,9 +24,8 @@ import { AppComponent } from './app.component';
 import { DialogComponent } from './components/dialog/dialog.component';
 import { ManageFoodDetailsComponent } from './components/manage-food-details/manage-food-details.component';
 import { ManageFoodComponent } from './components/manage-food/manage-food.component';
-import { MainInterceptor } from './services/interceptors/main.interceptor';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MeasurementsPipe } from './pipes/measurements.pipe';
+import { MainInterceptor } from './services/interceptors/main.interceptor';
 
 
 
@@ -79,8 +80,8 @@ const appRoutes: Routes = [
     MatSelectModule,
     MatSnackBarModule,
     MatDialogModule,
-    MatProgressSpinnerModule
-
+    MatProgressSpinnerModule,
+    MatSidenavModule
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,
