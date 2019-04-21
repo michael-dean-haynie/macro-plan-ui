@@ -8,7 +8,7 @@ export class MeasurementsPipe implements PipeTransform {
 
   transform(mmts: Measurement[], args?: any): any {
     return mmts.map(mmt => {
-      return mmt.value + ' ' + mmt.unit.abbreviation;
+      return mmt.amount + ' ' + mmt.unit.abbreviation;
     }).join(', ');
   }
 

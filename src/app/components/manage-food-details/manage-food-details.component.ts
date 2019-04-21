@@ -257,7 +257,7 @@ export class ManageFoodDetailsComponent implements OnInit {
       this.food.measurements.forEach(mmt => {
         const mmtCtrlArray = this.foodForm.get('measurements') as FormArray;
         mmtCtrlArray.push(this.fb.group({
-          value: [mmt.value],
+          amount: [mmt.amount],
           unitType: [mmt.unit.unitType],
           unit: [mmt.unit.unit],
         }));
@@ -284,7 +284,7 @@ export class ManageFoodDetailsComponent implements OnInit {
     const formMmts = ff.get('measurements') as FormArray;
     formMmts.controls.forEach(formMmt => {
       const apiMmt: Measurement = {
-        value: formMmt.get('value').value,
+        amount: formMmt.get('amount').value,
         unit: this.helperUnitService.getUnitModelByEnum(formMmt.get('unit').value, this.units)
       };
 
@@ -318,7 +318,7 @@ export class ManageFoodDetailsComponent implements OnInit {
 
   private buildDefaultMeasurement(): FormGroup {
     return this.fb.group({
-      value: [1],
+      amount: [1],
       unitType: [UnitTypeEnum.VOLUME],
       unit: [UnitEnum.CUP]
     });
