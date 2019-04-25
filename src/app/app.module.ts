@@ -26,6 +26,7 @@ import { ManageFoodDetailsComponent } from './components/manage-food-details/man
 import { ManageFoodComponent } from './components/manage-food/manage-food.component';
 import { MeasurementsPipe } from './pipes/measurements.pipe';
 import { MainInterceptor } from './services/interceptors/main.interceptor';
+import { ManageDishesComponent } from './components/manage-dishes/manage-dishes.component';
 
 
 
@@ -37,7 +38,18 @@ const appRoutes: Routes = [
     path: 'manage-food/:id', component: ManageFoodDetailsComponent
   },
   {
+    path: 'manage-dishes', component: ManageDishesComponent
+  },
+  // {
+  //   path: 'manage-dishes/:id', component: ManageDishDetailsComponent
+  // },
+  {
     path: '',
+    redirectTo: '/manage-food',
+    pathMatch: 'full'
+  },
+  {
+    path: '**',
     redirectTo: '/manage-food',
     pathMatch: 'full'
   },
@@ -51,6 +63,7 @@ const appRoutes: Routes = [
     ManageFoodDetailsComponent,
     DialogComponent,
     MeasurementsPipe,
+    ManageDishesComponent,
   ],
   imports: [
     BrowserModule,
