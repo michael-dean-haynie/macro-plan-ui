@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Food } from '../models/api/food.model';
-import { FoodSortableField } from '../models/food-sortable-field';
+import { SortableField } from '../models/sortable-field';
 import { SortDirectionEnum } from './../enums/sort-direction.enum';
 
 @Injectable({
@@ -12,7 +12,7 @@ import { SortDirectionEnum } from './../enums/sort-direction.enum';
 export class ApiFoodService {
   private baseUrl = `${environment.apiBaseUrl}/food`;
 
-  foodSortableFields: FoodSortableField[] = [
+  foodSortableFields: SortableField[] = [
     { displayName: 'Calories', apiName: 'calories' },
     { displayName: 'Fat', apiName: 'fat' },
     { displayName: 'Fat %', apiName: 'fatPercentage' },

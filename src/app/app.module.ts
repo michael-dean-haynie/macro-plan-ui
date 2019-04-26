@@ -27,6 +27,7 @@ import { ManageFoodComponent } from './components/manage-food/manage-food.compon
 import { MeasurementsPipe } from './pipes/measurements.pipe';
 import { MainInterceptor } from './services/interceptors/main.interceptor';
 import { ManageDishesComponent } from './components/manage-dishes/manage-dishes.component';
+import { SearchBarComponent } from './components/search-bar/search-bar.component';
 
 
 
@@ -64,6 +65,7 @@ const appRoutes: Routes = [
     DialogComponent,
     MeasurementsPipe,
     ManageDishesComponent,
+    SearchBarComponent,
   ],
   imports: [
     BrowserModule,

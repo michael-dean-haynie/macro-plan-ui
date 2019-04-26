@@ -1,0 +1,40 @@
+@import "../../../style-variables.scss";
+
+.search-bar {
+  display: grid;
+  grid-template-columns: 1fr auto auto auto;
+  grid-gap: .5em;
+  margin-bottom: 1rem;
+
+  @media (min-width: $list-page-two-col-bp) {
+    grid-column-gap: 1em;
+  }
+}
+
+.search-bar__input {
+  font-size: 1.5em;
+  padding-left: .5em;
+  width: 100%;
+}
+
+.search-bar__submit {
+  @media (max-width: $list-page-two-col-bp) {
+    min-width: initial;
+    padding-left: .5em;
+    padding-right: .5em;
+  }
+}
+
+.search-bar__results {
+  color:rgba(0,0,0,.4);
+  font-size: .75rem;
+}
+
+.search-bar__new-button {
+  grid-column-start: -4;
+  grid-column-end: -1;
+
+  button {
+    width: 100%;
+  }
+}

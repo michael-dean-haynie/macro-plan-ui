@@ -1,40 +1,7 @@
-<form (submit)="onSearchSubmit($event)">
-  <div class="search-bar">
-    <input class="search-bar__input" type="search" name="search" placeholder="Search" [(ngModel)]="searchTerm"
-      autocomplete="off">
-    <span>
-      <button mat-raised-button type="submit" class="search-bar__submit">
-        <i class="material-icons">search</i>
-      </button>
-    </span>
-    <span>
-      <mat-menu #appMenu="matMenu">
-        <button mat-menu-item type="button" *ngFor="let field of foodSortableFields"
-          [disabled]="activeSortField === field.apiName" (click)="onSortFieldSelected(field.apiName)">
-          {{field.displayName}}
-        </button>
-      </mat-menu>
-
-      <button mat-icon-button type="button" [matMenuTriggerFor]="appMenu">
-        <i class="material-icons">sort</i>
-      </button>
-    </span>
-    <span>
-      <button mat-icon-button type="button">
-        <i *ngIf="activeSortDirection === SortDirectionEnum.ASC" (click)="toggleSortDirection()"
-          class="material-icons">arrow_upward</i>
-        <i *ngIf="activeSortDirection === SortDirectionEnum.DESC" (click)="toggleSortDirection()"
-          class="material-icons">arrow_downward</i>
-      </button>
-    </span>
-    <div class="search-bar__results">
-      <span>{{searchResultsMessage}}</span>
-    </div>
-    <div class="search-bar__new-food">
-      <button mat-raised-button color="primary" type="button" (click)="onClickNewFood()">New Food</button>
-    </div>
-  </div>
-</form>
+<app-search-bar [searchBarValues]="initialSearchBarValues" [sortableFields]="sortableFields"
+  [searchResultsCount]="foods.length" [newButtonText]="'New Food'" (searchSubmitted)="onSearchSubmitted($event)"
+  (newButtonClicked)="onNewButtonClicked()">
+</app-search-bar>
 
 <div *ngIf="loading" class="loading-container">
   <mat-spinner></mat-spinner>

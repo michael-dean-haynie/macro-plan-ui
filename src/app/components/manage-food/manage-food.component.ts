@@ -3,9 +3,10 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { SortDirectionEnum } from 'src/app/enums/sort-direction.enum';
 import { Food } from 'src/app/models/api/food.model';
-import { FoodSortableField } from '../../models/food-sortable-field';
+import { SortableField } from '../../models/sortable-field';
 import { ApiFoodService } from './../../services/api-food.service';
 import { HelperFoodService } from './../../services/helper-food.service';
+import { SearchBarValues } from '../search-bar/search-bar.component';
 
 @Component({
   selector: 'app-manage-food',
@@ -21,15 +22,15 @@ export class ManageFoodComponent implements OnInit {
   chartDataMap = {};
   chartReadyMap = {};
 
-  // sorting
-  foodSortableFields: FoodSortableField[];
-  activeSortField: string;
-  SortDirectionEnum = SortDirectionEnum; // make it available to tempalte for comparisons
-  activeSortDirection: SortDirectionEnum = SortDirectionEnum.ASC;
-
   // searching
-  searchTerm = '';
-  searchResultsMessage = '';
+  initialSearchBarValues: SearchBarValues = {
+    searchTerm: '',
+    activeSortField: 'name',
+    activeSortDirection: SortDirectionEnum.ASC
+  };
+
+  // sorting
+  sortableFields: SortableField[];
 
   // loading (will be set to true while searches are being made)
   loading = true;
@@ -44,31 +45,18 @@ export class ManageFoodComponent implements OnInit {
 
   ngOnInit() {
     // Store sortable fields on food (after sorting alpha asc). Set default sort field (name)
-    this.foodSortableFields = this.apiFoodService.foodSortableFields
+    this.sortableFields = this.apiFoodService.foodSortableFields
       .sort((a, b) => a.displayName.toLowerCase().localeCompare(b.displayName.toLocaleLowerCase()));
-    this.activeSortField = 'name';
 
-    this.loadFoods();
+    this.loadFoods(this.initialSearchBarValues.searchTerm,
+      this.initialSearchBarValues.activeSortField, this.initialSearchBarValues.activeSortDirection);
   }
 
-  onSearchSubmit(event: Event) {
-    event.preventDefault();
-    this.loadFoods();
+  onSearchSubmitted(searchBarValues: SearchBarValues) {
+    this.loadFoods(searchBarValues.searchTerm, searchBarValues.activeSortField, searchBarValues.activeSortDirection);
   }
 
-  onSortFieldSelected(sortField: string): void {
-    this.activeSortField = sortField;
-    this.loadFoods();
-  }
-
-  toggleSortDirection(): void {
-    this.activeSortDirection =
-      (this.activeSortDirection === SortDirectionEnum.ASC ? SortDirectionEnum.DESC : SortDirectionEnum.ASC);
-
-    this.loadFoods();
-  }
-
-  onClickNewFood(): void {
+  onNewButtonClicked(): void {
     this.router.navigate(['manage-food', 'create']);
   }
 
@@ -89,13 +77,13 @@ export class ManageFoodComponent implements OnInit {
     return this.helperFoodService.getMacroPercentage(macro, food);
   }
 
-  private loadFoods(): void {
+  private loadFoods(searchTerm: string, activeSortField: string, activeSortDirection: SortDirectionEnum): void {
     this.foods = [];
     this.loading = true;
     this.chartDataMap = {};
     this.chartReadyMap = {};
 
-    this.apiFoodService.getFoods(this.searchTerm, this.activeSortField, this.activeSortDirection)
+    this.apiFoodService.getFoods(searchTerm, activeSortField, activeSortDirection)
       .subscribe(
         foods => {
           this.loading = false;
@@ -107,14 +95,8 @@ export class ManageFoodComponent implements OnInit {
           this.foods.forEach(food => {
             this.chartDataMap[food.id] = this.prepareChartData(food);
           });
-
-          this.updateSearchResultsMessage();
         },
         (error) => { this.snackBarService.showError(); });
-  }
-
-  private updateSearchResultsMessage(): void {
-    this.searchResultsMessage = `${this.foods.length} results found (${!this.searchTerm ? 'empty search' : '"' + this.searchTerm + '"'})`;
   }
 
   // TODO: add type safety? Array<Array<string | number | {}>>,

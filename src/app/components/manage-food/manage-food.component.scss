@@ -1,51 +1,8 @@
 @import "../../../style-variables.scss";
 
-// main foods list column breakpoints
-$two-col-bp: 750px;
-$three-col-bp: 1050px;
-
 // individual food card breakpoints
 $one-col-card-bp: 450px;
 $three-col-card-bp: 1420px;
-
-.search-bar {
-  display: grid;
-  grid-template-columns: 1fr auto auto auto;
-  grid-gap: .5em;
-  margin-bottom: 1rem;
-
-  @media (min-width: $two-col-bp) {
-    grid-column-gap: 1em;
-  }
-}
-
-.search-bar__input {
-  font-size: 1.5em;
-  padding-left: .5em;
-  width: 100%;
-}
-
-.search-bar__submit {
-  @media (max-width: $two-col-bp) {
-    min-width: initial;
-    padding-left: .5em;
-    padding-right: .5em;
-  }
-}
-
-.search-bar__results {
-  color:rgba(0,0,0,.4);
-  font-size: .75rem;
-}
-
-.search-bar__new-food {
-  grid-column-start: -4;
-  grid-column-end: -1;
-
-  button {
-    width: 100%;
-  }
-}
 
 .foods {
   display: grid;
@@ -53,12 +10,12 @@ $three-col-card-bp: 1420px;
   grid-column-gap: 1rem;
 
   // 2 column bp
-  @media (min-width: $two-col-bp){
+  @media (min-width: $list-page-two-col-bp){
       grid-template-columns: 1fr 1fr;
   }
 
   // 3 column bp
-  @media (min-width: $three-col-bp){
+  @media (min-width: $list-page-three-col-bp){
       grid-template-columns: 1fr 1fr 1fr;
   }
 }
@@ -101,7 +58,7 @@ mat-card-content {
     grid-column-gap: 2em;
   }
 
-  @media (min-width: $one-col-card-bp) and (max-width: $two-col-bp){
+  @media (min-width: $one-col-card-bp) and (max-width: $list-page-two-col-bp){
     @include wide-card
   }
 
