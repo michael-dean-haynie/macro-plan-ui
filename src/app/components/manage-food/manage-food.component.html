@@ -30,21 +30,24 @@
             <span></span> <!-- col spacer with row border -->
             <span>{{food.fat}}g</span>
             <span></span> <!-- col spacer with row border -->
-            <span>{{getCalsFromFat(food.fat)}} cal ({{getMacroPercentage('fat', food)}}%)</span>
+            <span>{{macroService.macroToCalories(food.fat, MacroEnum.FAT)}} cal
+              ({{macroService.getMacroPercentage('fat', food)}}%)</span>
 
             <!-- Carbs -->
             <span class="food__data-heading-carbs">Carbs</span>
             <span></span> <!-- col spacer with row border -->
             <span>{{food.carbs}}g</span>
             <span></span> <!-- col spacer with row border -->
-            <span>{{getCalsFromCarbs(food.carbs)}} cal ({{getMacroPercentage('carbs', food)}}%)</span>
+            <span>{{macroService.macroToCalories(food.carbs, MacroEnum.CARBS)}} cal
+              ({{macroService.getMacroPercentage('carbs', food)}}%)</span>
 
             <!-- Protein -->
             <span class="food__data-heading-protein">Protein</span>
             <span></span> <!-- col spacer with row border -->
             <span>{{food.protein}}g</span>
             <span></span> <!-- col spacer with row border -->
-            <span>{{getCalsFromProtein(food.protein)}} cal ({{getMacroPercentage('protein', food)}}%)</span>
+            <span>{{macroService.macroToCalories(food.protein, MacroEnum.PROTEIN)}} cal
+              ({{macroService.getMacroPercentage('protein', food)}}%)</span>
           </span>
           <div>
             <div>

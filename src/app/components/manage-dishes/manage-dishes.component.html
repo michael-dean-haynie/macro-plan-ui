@@ -1,3 +1,4 @@
-<p>
-  manage-dishes works!
-</p>
+<app-search-bar [searchBarValues]="initialSearchBarValues" [sortableFields]="sortableFields"
+  [searchResultsCount]="dishes.length" [newButtonText]="'New Dish'" (searchSubmitted)="onSearchSubmitted($event)"
+  (newButtonClicked)="onNewButtonClicked()">
+</app-search-bar>

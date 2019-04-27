@@ -1,12 +1,14 @@
-import { SnackBarService } from './../../services/snack-bar.service';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { SortDirectionEnum } from 'src/app/enums/sort-direction.enum';
 import { Food } from 'src/app/models/api/food.model';
 import { SortableField } from '../../models/sortable-field';
+import { SearchBarValues } from '../search-bar/search-bar.component';
+import { MacroEnum } from './../../enums/macro.enum';
 import { ApiFoodService } from './../../services/api-food.service';
 import { HelperFoodService } from './../../services/helper-food.service';
-import { SearchBarValues } from '../search-bar/search-bar.component';
+import { MacroService } from './../../services/macro.service';
+import { SnackBarService } from './../../services/snack-bar.service';
 
 @Component({
   selector: 'app-manage-food',
@@ -35,8 +37,12 @@ export class ManageFoodComponent implements OnInit {
   // loading (will be set to true while searches are being made)
   loading = true;
 
+  // template accessible enums
+  MacroEnum = MacroEnum;
+
 
   constructor(
+    public macroService: MacroService,
     private router: Router,
     private apiFoodService: ApiFoodService,
     private helperFoodService: HelperFoodService,
@@ -44,7 +50,7 @@ export class ManageFoodComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    // Store sortable fields on food (after sorting alpha asc). Set default sort field (name)
+    // Store sortable fields on food (after sorting alpha asc)
     this.sortableFields = this.apiFoodService.foodSortableFields
       .sort((a, b) => a.displayName.toLowerCase().localeCompare(b.displayName.toLocaleLowerCase()));
 
@@ -64,26 +70,13 @@ export class ManageFoodComponent implements OnInit {
     this.router.navigate(['manage-food', id]);
   }
 
-  getCalsFromFat(grams: number): number {
-    return this.helperFoodService.fatToCalories(grams);
-  }
-  getCalsFromCarbs(grams: number): number {
-    return this.helperFoodService.carbsToCalories(grams);
-  }
-  getCalsFromProtein(grams: number): number {
-    return this.helperFoodService.proteinToCalories(grams);
-  }
-  getMacroPercentage(macro: string, food: Food) {
-    return this.helperFoodService.getMacroPercentage(macro, food);
-  }
-
   private loadFoods(searchTerm: string, activeSortField: string, activeSortDirection: SortDirectionEnum): void {
     this.foods = [];
     this.loading = true;
     this.chartDataMap = {};
     this.chartReadyMap = {};
 
-    this.apiFoodService.getFoods(searchTerm, activeSortField, activeSortDirection)
+    this.apiFoodService.list(searchTerm, activeSortField, activeSortDirection)
       .subscribe(
         foods => {
           this.loading = false;
@@ -99,12 +92,11 @@ export class ManageFoodComponent implements OnInit {
         (error) => { this.snackBarService.showError(); });
   }
 
-  // TODO: add type safety? Array<Array<string | number | {}>>,
-  private prepareChartData(food: Food) {
+  private prepareChartData(food: Food): Array<Array<string | number | {}>> {
     return [
-      ['Fat', this.helperFoodService.fatToCalories(food.fat)],
-      ['Carbs', this.helperFoodService.carbsToCalories(food.carbs)],
-      ['Protein', this.helperFoodService.proteinToCalories(food.protein)],
+      ['Fat', this.macroService.macroToCalories(food.fat, MacroEnum.FAT)],
+      ['Carbs', this.macroService.macroToCalories(food.carbs, MacroEnum.CARBS)],
+      ['Protein', this.macroService.macroToCalories(food.protein, MacroEnum.FAT)],
     ];
   }
 

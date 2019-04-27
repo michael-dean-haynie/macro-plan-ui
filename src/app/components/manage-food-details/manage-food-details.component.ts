@@ -1,8 +1,7 @@
-import { DialogComponent } from './../dialog/dialog.component';
 import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ReplaySubject } from 'rxjs';
 import { Food } from 'src/app/models/api/food.model';
@@ -15,6 +14,7 @@ import { UnitEnum } from './../../enums/unit.enum';
 import { ApiUnitService } from './../../services/api-unit.service';
 import { HelperFoodService } from './../../services/helper-food.service';
 import { SnackBarService } from './../../services/snack-bar.service';
+import { DialogComponent } from './../dialog/dialog.component';
 
 @Component({
   selector: 'app-manage-food-details',
@@ -120,7 +120,7 @@ export class ManageFoodDetailsComponent implements OnInit {
   }
 
   onConfirmDeleteFood(): void {
-    this.apiFoodService.deleteFood(this.foodId).subscribe(
+    this.apiFoodService.delete(this.foodId).subscribe(
       () => {
         this.snackBarService.showSuccess(`Successfully deleted "${this.food.name}"`);
         this.router.navigate(['manage-food']);
@@ -135,7 +135,7 @@ export class ManageFoodDetailsComponent implements OnInit {
       this.populateApiModelWithFormData();
 
       if (this.createMode) {
-        this.apiFoodService.createFood(this.food).subscribe(
+        this.apiFoodService.create(this.food).subscribe(
           () => {
             this.snackBarService.showSuccess(`Successfully created "${this.food.name}"`);
             this.router.navigate(['manage-food']);
@@ -143,7 +143,7 @@ export class ManageFoodDetailsComponent implements OnInit {
             this.snackBarService.showError(`Something went wrong. Could not create "${this.food.name}"`);
           });
       } else {
-        this.apiFoodService.updateFood(this.food).subscribe(
+        this.apiFoodService.update(this.food).subscribe(
           () => {
             this.snackBarService.showSuccess(`Successfully updated "${this.food.name}"`);
             this.router.navigate(['manage-food']);
@@ -228,7 +228,7 @@ export class ManageFoodDetailsComponent implements OnInit {
         this.loading = false;
       });
     } else {
-      this.apiFoodService.getFood(this.foodId).subscribe(
+      this.apiFoodService.get(this.foodId).subscribe(
         food => {
           this.food = food;
           this.populateFormDataWithApiModel();
