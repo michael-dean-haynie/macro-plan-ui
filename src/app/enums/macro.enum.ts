@@ -1,5 +1,5 @@
 export enum MacroEnum {
-  FAT = 'Fat',
-  CARBS = 'Carbs',
-  PROTEIN = 'Protein'
+  FAT = 'FAT',
+  CARBS = 'CARBS',
+  PROTEIN = 'PROTEIN'
 }

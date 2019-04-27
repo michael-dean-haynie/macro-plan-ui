@@ -23,7 +23,6 @@ export class ApiFoodService {
     { displayName: 'Name', apiName: 'name' },
     { displayName: 'Brand', apiName: 'brand' },
     { displayName: 'Style/Flavor', apiName: 'styleOrFlavor' },
-
   ];
 
   constructor(private http: HttpClient) { }

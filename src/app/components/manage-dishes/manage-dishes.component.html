@@ -2,3 +2,13 @@
   [searchResultsCount]="dishes.length" [newButtonText]="'New Dish'" (searchSubmitted)="onSearchSubmitted($event)"
   (newButtonClicked)="onNewButtonClicked()">
 </app-search-bar>
+
+<div *ngIf="loading" class="loading-container">
+  <mat-spinner></mat-spinner>
+</div>
+
+<div class="dishes">
+  <ng-container *ngFor="let dish of dishes">
+    <app-dish-summary-card [dish]="dish"></app-dish-summary-card>
+  </ng-container>
+</div>

@@ -29,6 +29,13 @@ export class HelperDishService {
       .reduce((macroSum, ingredientMacro) => macroSum + ingredientMacro);
   }
 
+  public getMacroPercentage(macro: MacroEnum, dish: Dish) {
+    const targetMacroCals = this.macroService.macroToCalories(this.calcMacro(dish, macro), macro);
+    const totalCals = this.calcCalories(dish);
+
+    return 100 * targetMacroCals / totalCals;
+  }
+
   /**
    * Caculate the total calories in an ingredient as the sum of it's macro nutrient caloric values
    * @param ingredient the ingredient

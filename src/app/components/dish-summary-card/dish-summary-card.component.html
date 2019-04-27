@@ -1,0 +1,64 @@
+<div class="dish">
+  <mat-card class="dish" (click)="onDishSelected(dish.id)">
+    <mat-card-title>
+      <span>{{dish.name}}</span>
+    </mat-card-title>
+
+
+
+    <mat-card-content class="summary__content">
+      <div class="summary__chart">
+        <mat-spinner *ngIf="chartReady !== true"></mat-spinner>
+        <google-chart [type]="'PieChart'" [options]="chartOptions" [data]="chartData" (ready)="chartReady = true"
+          [style.display]="chartReady === true ? 'initial' : 'none'">
+        </google-chart>
+      </div>
+      <div class="summary__text-data">
+        <span class="food__macros">
+          <!-- Fat -->
+          <span class="food__data-heading-fat">Fat</span>
+          <span></span> <!-- col spacer with row border -->
+          <span class="align-right">{{ fat | number: '1.1-1' }}g</span>
+          <span></span> <!-- col spacer with row border -->
+          <span class="align-right">{{ fatCalories | number: '1.1-1' }} cal</span>
+          <span></span> <!-- col spacer with row border -->
+          <span class="align-right">({{ fatPercentage | number: '1.0-0' }}%)</span>
+
+          <!-- Carbs -->
+          <span class="food__data-heading-carbs">Carbs</span>
+          <span></span> <!-- col spacer with row border -->
+          <span class="align-right">{{ carbs | number: '1.1-1' }}g</span>
+          <span></span> <!-- col spacer with row border -->
+          <span class="align-right">{{ carbsCalories | number: '1.1-1' }} cal</span>
+          <span></span> <!-- col spacer with row border -->
+          <span class="align-right">({{ carbsPercentage | number: '1.0-0' }}%)</span>
+
+          <!-- Protein -->
+          <span class="food__data-heading-protein">Protein</span>
+          <span></span> <!-- col spacer with row border -->
+          <span class="align-right">{{ protein | number: '1.1-1' }}g</span>
+          <span></span> <!-- col spacer with row border -->
+          <span class="align-right">{{ proteinCalories | number: '1.1-1' }} cal</span>
+          <span></span> <!-- col spacer with row border -->
+          <span class="align-right">({{ proteinPercentage | number: '1.0-0' }}%)</span>
+        </span>
+        <div>
+          <div>
+            <span class="food__data-heading-calories">Calories:</span>
+            &nbsp;
+            {{calories}}
+          </div>
+          <!-- TODO: make a pipe that formats a serving size? -->
+          <div>
+            <span class="food__data-heading-serving-size">Serving Size:</span>
+            &nbsp;
+            {{dish.measurements | measurements}}
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+
+
+
+  </mat-card>
+</div>

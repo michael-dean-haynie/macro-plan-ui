@@ -1,0 +1,100 @@
+@import "../../../style-variables.scss";
+
+// individual food card breakpoints
+$one-col-card-bp: 450px;
+$three-col-card-bp: 1420px;
+
+.food__container {
+  height:100%;
+  display: grid;
+  align-items: stretch;
+}
+
+mat-card-title{
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-column-gap: 1em;
+  justify-content: space-between;
+
+  .food__brand {
+    color: rgba(0,0,0,.54);
+    text-align: right;
+  }
+}
+
+mat-card-content {
+  display:flow;
+}
+
+.food__content {
+  display: grid;
+  grid-template-columns: fit-content(100%) auto;
+  grid-gap: 1em;
+}
+
+.food__chart {
+  // value also set in chart config obj
+  min-width: 100px;
+}
+
+.food__text-data {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  grid-row-gap: 1em;
+
+  @mixin wide-card {
+    grid-template-rows: auto;
+    grid-template-columns: auto auto;
+    grid-column-gap: 2em;
+  }
+
+  @media (min-width: $one-col-card-bp) and (max-width: $list-page-two-col-bp){
+    @include wide-card
+  }
+
+  @media (min-width: $three-col-card-bp){
+    @include wide-card
+  }
+}
+
+.food__macros {  
+  position: relative;
+  display: inline-grid;
+  grid-template-columns: auto 1em auto 1em auto .5em auto;
+  grid-template-rows: auto auto auto;
+  font-size: 0.9em;
+  
+  .align-right {
+    text-align: right;
+  }
+}
+
+.food__macros > * {
+  border-top: $divider-border;
+
+  // selects first 5 (so the whole first row)
+  &:nth-child(-n+7) {
+    border-top: none;
+  }
+}
+
+// TODO: combine font-weight for these
+.food__data-heading-fat {
+  font-weight: bold;
+  color: $fat-color;
+}
+.food__data-heading-carbs {
+  font-weight: bold;
+  color: $carbs-color;
+}
+.food__data-heading-protein {
+  font-weight: bold;
+  color: $protein-color;
+}
+.food__data-heading-calories {
+  font-weight: bold;
+  color: $calories-color;
+}
+.food__data-heading-serving-size {
+  font-weight: bold;
+}

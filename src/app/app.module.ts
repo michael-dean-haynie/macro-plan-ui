@@ -22,12 +22,14 @@ import { RouterModule, Routes } from '@angular/router';
 import { GoogleChartsModule } from 'angular-google-charts';
 import { AppComponent } from './app.component';
 import { DialogComponent } from './components/dialog/dialog.component';
+import { DishSummaryCardComponent } from './components/dish-summary-card/dish-summary-card.component';
+import { FoodSummaryCardComponent } from './components/food-summary-card/food-summary-card.component';
+import { ManageDishesComponent } from './components/manage-dishes/manage-dishes.component';
 import { ManageFoodDetailsComponent } from './components/manage-food-details/manage-food-details.component';
 import { ManageFoodComponent } from './components/manage-food/manage-food.component';
+import { SearchBarComponent } from './components/search-bar/search-bar.component';
 import { MeasurementsPipe } from './pipes/measurements.pipe';
 import { MainInterceptor } from './services/interceptors/main.interceptor';
-import { ManageDishesComponent } from './components/manage-dishes/manage-dishes.component';
-import { SearchBarComponent } from './components/search-bar/search-bar.component';
 
 
 
@@ -66,6 +68,8 @@ const appRoutes: Routes = [
     MeasurementsPipe,
     ManageDishesComponent,
     SearchBarComponent,
+    FoodSummaryCardComponent,
+    DishSummaryCardComponent
   ],
   imports: [
     BrowserModule,

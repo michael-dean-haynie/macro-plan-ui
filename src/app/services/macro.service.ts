@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Food } from '../models/api/food.model';
 import { MacroEnum } from './../enums/macro.enum';
 
 @Injectable({
@@ -9,6 +8,11 @@ export class MacroService {
 
   constructor() { }
 
+  /**
+   * Converts a macro from grams to calories
+   * @param grams the number of grams of macro nutrient
+   * @param macro the macro nutrient
+   */
   public macroToCalories(grams: number, macro: MacroEnum) {
     switch (macro) {
       case MacroEnum.FAT: return grams * 9;
@@ -21,19 +25,5 @@ export class MacroService {
     // kinda ridiculous right?
     const keys = Object.keys(MacroEnum);
     return keys.filter(k => isNaN(Number(k))).map(k => k as unknown as MacroEnum);
-  }
-
-  public getMacroPercentage(macro: string, food: Food) {
-    if (!['fat', 'carbs', 'protein'].includes(macro)) {
-      throw Error(`Could not find percentage of unknown macro "${macro}"`);
-    }
-    const fatCals = this.macroToCalories(food.fat, MacroEnum.FAT);
-    const carbCals = this.macroToCalories(food.fat, MacroEnum.CARBS);
-    const proteinCals = this.macroToCalories(food.fat, MacroEnum.PROTEIN);
-    const totalCals = fatCals + carbCals + proteinCals;
-
-    // TODO: maybe I should let a pipe format this?
-    // TODO: switch stmt or something better
-    return Math.floor(100 * (macro === 'fat' ? fatCals : macro === 'carbs' ? carbCals : proteinCals) / totalCals);
   }
 }
