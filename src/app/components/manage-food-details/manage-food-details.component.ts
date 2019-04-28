@@ -24,7 +24,7 @@ import { DialogComponent } from './../dialog/dialog.component';
 export class ManageFoodDetailsComponent implements OnInit {
   // routing
   foodId: number;
-  idLoaded$ = new ReplaySubject<boolean>(); // <-- will emit a value when units are loaded
+  idLoaded$ = new ReplaySubject<boolean>(); // <-- will emit a value when id is loaded
   createMode = false;
 
   // api results
@@ -34,13 +34,10 @@ export class ManageFoodDetailsComponent implements OnInit {
 
   // form controls
   foodForm: FormGroup;
-  foodFormBuilt$ = new ReplaySubject<boolean>() // <-- will emit a value when food form has been built
+  foodFormBuilt$ = new ReplaySubject<boolean>(); // <-- will emit a value when food form has been built
 
-  // some messy ts just to list the values of an enum to be used in template
-  unitTypes: UnitTypeEnum[] = ((): UnitTypeEnum[] => {
-    const keys = Object.keys(UnitTypeEnum);
-    return keys.filter(k => isNaN(Number(k))).map(k => k as unknown as UnitTypeEnum);
-  })();
+  // template accessible enums
+  unitTypes: UnitTypeEnum[];
 
   // loading (will be set to false once all data needed for rendering is ready)
   loading = true;
@@ -60,6 +57,9 @@ export class ManageFoodDetailsComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    // load unit types
+    this.unitTypes = this.helperUnitService.getUnitTypeEnumList();
+
     // load units
     this.apiUnitService.getUnits().subscribe(
       units => {

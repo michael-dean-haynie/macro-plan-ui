@@ -24,6 +24,7 @@ import { AppComponent } from './app.component';
 import { DialogComponent } from './components/dialog/dialog.component';
 import { DishSummaryCardComponent } from './components/dish-summary-card/dish-summary-card.component';
 import { FoodSummaryCardComponent } from './components/food-summary-card/food-summary-card.component';
+import { ManageDishDetailsComponent } from './components/manage-dish-details/manage-dish-details.component';
 import { ManageDishesComponent } from './components/manage-dishes/manage-dishes.component';
 import { ManageFoodDetailsComponent } from './components/manage-food-details/manage-food-details.component';
 import { ManageFoodComponent } from './components/manage-food/manage-food.component';
@@ -43,9 +44,9 @@ const appRoutes: Routes = [
   {
     path: 'manage-dishes', component: ManageDishesComponent
   },
-  // {
-  //   path: 'manage-dishes/:id', component: ManageDishDetailsComponent
-  // },
+  {
+    path: 'manage-dishes/:id', component: ManageDishDetailsComponent
+  },
   {
     path: '',
     redirectTo: '/manage-food',
@@ -69,7 +70,8 @@ const appRoutes: Routes = [
     ManageDishesComponent,
     SearchBarComponent,
     FoodSummaryCardComponent,
-    DishSummaryCardComponent
+    DishSummaryCardComponent,
+    ManageDishDetailsComponent
   ],
   imports: [
     BrowserModule,

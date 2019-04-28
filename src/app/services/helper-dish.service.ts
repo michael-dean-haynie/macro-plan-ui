@@ -12,6 +12,16 @@ export class HelperDishService {
 
   constructor(private macroService: MacroService, private helperFoodService: HelperFoodService) { }
 
+  public getEmptyDish(): Dish {
+    return {
+      id: null,
+      name: null,
+      measurements: null,
+      ingredients: null,
+      isTemplate: true
+    };
+  }
+
   /**
    * Calculate the total calories in a dish
    * @param dish the dish

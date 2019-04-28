@@ -1,0 +1,15 @@
+<div *ngIf="loading" class="loading-container">
+  <mat-spinner></mat-spinner>
+</div>
+
+<ng-container *ngIf="!loading">
+  <div class="title-bar">
+    <h2>{{createMode ? 'New' : 'Edit' }} Dish Item</h2>
+    <button *ngIf="!createMode" mat-raised-button color="warn" type="button"
+      (click)="onClickDeleteDish()">Delete</button>
+  </div>
+
+  <form [formGroup]="dishForm" (ngSubmit)="onSubmit()">
+
+  </form>
+</ng-container>
