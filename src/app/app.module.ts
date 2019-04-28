@@ -20,6 +20,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule, Routes } from '@angular/router';
 import { GoogleChartsModule } from 'angular-google-charts';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { AppComponent } from './app.component';
 import { DialogComponent } from './components/dialog/dialog.component';
 import { DishSummaryCardComponent } from './components/dish-summary-card/dish-summary-card.component';
@@ -102,7 +103,10 @@ const appRoutes: Routes = [
     MatSnackBarModule,
     MatDialogModule,
     MatProgressSpinnerModule,
-    MatSidenavModule
+    MatSidenavModule,
+
+    // Other
+    NgxMatSelectSearchModule
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,

@@ -1,0 +1,68 @@
+@import "../../../style-variables.scss";
+
+.title-bar {
+  display: grid;
+  grid-template-columns: auto auto;
+  justify-content: space-between;
+
+  h2 {
+    margin: 0;
+  }
+}
+
+.field-groups {
+  display: grid;
+  row-gap: 1rem;
+  margin-top: 1rem;
+
+  mat-card-title { 
+    color: rgba(0,0,0,.87);
+    font-weight: 400;
+    font-size: 20px;
+    margin-bottom: 2rem;
+  }
+}
+
+#name-form-field {
+  width: 100%;
+}
+
+.serving-size {
+  display: grid;
+  grid-template-columns: 6em 9em 1fr 3em;
+  grid-column-gap: .5em;
+  font-size: .7em;
+
+  // css-grid is not perfect
+  // https://daverupert.com/2017/09/breaking-the-grid/
+  & > * {
+    min-width:0
+  }
+  select {
+    max-width: 100%;
+  }
+
+  // breakpoints
+  @media (min-width: 350px) {
+    font-size: .8em;
+  }
+  @media (min-width: 350px) {
+    font-size: .85em;
+  }
+  @media (min-width: 390px) {
+    font-size: .9em;
+  }
+  @media (min-width: 420px) {
+    font-size: 1em;
+  }
+  @media (min-width: 450px) {
+    grid-column-gap: 1em
+  }
+
+}
+
+.add-serving-size-row {
+  display:grid;
+  justify-items: end;
+}
+

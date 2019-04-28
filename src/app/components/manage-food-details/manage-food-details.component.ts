@@ -163,11 +163,10 @@ export class ManageFoodDetailsComponent implements OnInit {
     const unitCtrl = this.foodForm.get(['measurements', index, 'unit']);
     unitCtrl.setValue(null);
     unitCtrl.markAsTouched();
-
   }
 
   onClickDeleteMeasurement(index: number): void {
-    // TODO: use modal for confirmation first
+    // TODO: use modal for confirmation first?
     const measurementsFormArray = this.foodForm.get('measurements') as FormArray;
     measurementsFormArray.removeAt(index);
     measurementsFormArray.markAsTouched();

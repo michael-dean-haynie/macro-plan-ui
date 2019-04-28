@@ -4,7 +4,9 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ReplaySubject } from 'rxjs';
+import { SortDirectionEnum } from 'src/app/enums/sort-direction.enum';
 import { UnitTypeEnum } from 'src/app/enums/unit-type.enum';
+import { Food } from 'src/app/models/api/food.model';
 import { Unit } from 'src/app/models/api/unit.model';
 import { ApiDishService } from 'src/app/services/api-dish.service';
 import { ApiUnitService } from 'src/app/services/api-unit.service';
@@ -12,6 +14,7 @@ import { SnackBarService } from 'src/app/services/snack-bar.service';
 import { DialogComponent } from '../dialog/dialog.component';
 import { UnitEnum } from './../../enums/unit.enum';
 import { Dish } from './../../models/api/dish.model';
+import { ApiFoodService } from './../../services/api-food.service';
 import { HelperDishService } from './../../services/helper-dish.service';
 import { HelperUnitService } from './../../services/helper-unit.service';
 
@@ -31,6 +34,10 @@ export class ManageDishDetailsComponent implements OnInit {
   unitsLoaded$ = new ReplaySubject<boolean>(); // <-- will emit a value when units are loaded
   dish: Dish;
 
+  foods: Food[];
+  filteredFoods: Food[];
+  foodsLoaded$ = new ReplaySubject<boolean>(); // <-- will emit a value when foods are loaded
+
   // form controls
   dishForm: FormGroup;
   dishFormBuilt$ = new ReplaySubject<boolean>(); // <-- will emit a value when dish form has been built
@@ -46,6 +53,7 @@ export class ManageDishDetailsComponent implements OnInit {
     private router: Router,
     private location: Location,
     private fb: FormBuilder,
+    private apiFoodService: ApiFoodService,
     private apiDishService: ApiDishService,
     private apiUnitService: ApiUnitService,
     private helperUnitService: HelperUnitService,
@@ -83,7 +91,14 @@ export class ManageDishDetailsComponent implements OnInit {
       this.idLoaded$.next(true); // <-- emit value indicating id has been
     });
 
-    // load food
+    // load foods
+    this.apiFoodService.list('', 'name', SortDirectionEnum.ASC).subscribe(foods => {
+      this.foods = foods;
+      this.filteredFoods = foods;
+      this.foodsLoaded$.next(true);
+    });
+
+    // load dish
     this.idLoaded$.subscribe(() => {
       this.loadDish();
     });
@@ -122,6 +137,65 @@ export class ManageDishDetailsComponent implements OnInit {
       });
   }
 
+  // clear value of unit select and mark touched so validation kicks in
+  onDishMeasurementUnitTypeChange(index: number): void {
+    const unitCtrl = this.dishForm.get(['measurements', index, 'unit']);
+    unitCtrl.setValue(null);
+    unitCtrl.markAsTouched();
+  }
+
+  // clear value of unit select and mark touched so validation kicks in
+  onIngredientMeasurementUnitTypeChange(index: number): void {
+    const unitCtrl = this.dishForm.get(['ingredients', index, 'measurement', 'unit']);
+    unitCtrl.setValue(null);
+    unitCtrl.markAsTouched();
+  }
+
+  onClickDeleteDishMeasurement(index: number): void {
+    const measurementsFormArray = this.dishForm.get('measurements') as FormArray;
+    measurementsFormArray.removeAt(index);
+    measurementsFormArray.markAsTouched();
+  }
+
+  onClickDeleteIngredient(index: number): void {
+    const measurementsFormArray = this.dishForm.get('ingredients') as FormArray;
+    measurementsFormArray.removeAt(index);
+    measurementsFormArray.markAsTouched();
+  }
+
+  onClickAddDishMeasurement(): void {
+    const measurementsFormArray = this.dishForm.get('measurements') as FormArray;
+    measurementsFormArray.push(this.buildDefaultMeasurement());
+    measurementsFormArray.markAsTouched();
+  }
+
+  onClickAddIngredient(): void {
+    const measurementsFormArray = this.dishForm.get('ingredients') as FormArray;
+    measurementsFormArray.push(this.buildDefaultIngredient());
+    measurementsFormArray.markAsTouched();
+  }
+
+  /**
+   * ----------------------------------------
+   * Template rendering logic
+   * ----------------------------------------
+   */
+
+  getDishMeasurementsFormGroups(): FormGroup[] {
+    const formArray = this.dishForm.get('measurements') as FormArray;
+    return formArray.controls.map(c => c as FormGroup);
+  }
+
+  getIngredientsFormGroups(): FormGroup[] {
+    const formArray = this.dishForm.get('ingredients') as FormArray;
+    return formArray.controls.map(c => c as FormGroup);
+  }
+
+  getUnitsOfType(unitType: UnitTypeEnum): UnitEnum[] {
+    return this.helperUnitService.getUnitsOfType(unitType, this.units);
+  }
+
+
   /**
    * ----------------------------------------
    * Private
@@ -132,6 +206,7 @@ export class ManageDishDetailsComponent implements OnInit {
     if (this.createMode) {
       this.dishFormBuilt$.subscribe(() => {
         this.dish = this.helperDishService.getEmptyDish();
+        this.bindFoodSelectFilterActions();
         this.loading = false;
       });
     } else {
@@ -139,6 +214,7 @@ export class ManageDishDetailsComponent implements OnInit {
         dish => {
           this.dish = dish;
           this.populateFormDataWithApiModel();
+          this.bindFoodSelectFilterActions();
         },
         (error) => { this.snackBarService.showError(); });
     }
@@ -170,6 +246,7 @@ export class ManageDishDetailsComponent implements OnInit {
         const ingredientCtrlArray = this.dishForm.get('ingredients') as FormArray;
         ingredientCtrlArray.push(this.fb.group({
           foodId: [ingredient.food.id],
+          foodFilter: [''],
           measurement: this.fb.group({
             amount: [ingredient.measurement.amount],
             unitType: [ingredient.measurement.unit.unitType],
@@ -217,8 +294,23 @@ export class ManageDishDetailsComponent implements OnInit {
   private buildDefaultIngredient(): FormGroup {
     return this.fb.group({
       foodId: [1],
+      foodFilter: [''],
       measurement: this.buildDefaultMeasurement()
     });
+  }
+
+  private bindFoodSelectFilterActions(): void {
+    const ingredientsFormArray = this.dishForm.get(['ingredients']) as FormArray;
+    ingredientsFormArray.controls.forEach(ingredientCtrl => {
+      const filterCtrl = ingredientCtrl.get(['foodFilter']);
+      filterCtrl.valueChanges.subscribe(() => {
+        this.filterFoods(filterCtrl.value);
+      });
+    });
+  }
+
+  private filterFoods(value: string): void {
+    this.filteredFoods = this.foods.filter(f => f.name.toLowerCase().includes(value.toLowerCase()));
   }
 
 }
