@@ -10,8 +10,23 @@ $three-col-card-bp: 1420px;
   align-items: stretch;
 }
 
-mat-card-content {
-  display:flow;
+mat-card-content > mat-divider {
+  margin-bottom: 1rem;
+}
+
+.section-heading{
+  margin-top: .5rem;
+  margin-bottom: .5rem;
+  color: rgba(0,0,0,.54);
+  font-weight:bold;
+
+  .section-heading__spacer{
+    height:.5rem;
+  }
+}
+
+#breakdown-heading {
+  margin-top:2rem;
 }
 
 .summary__content {
@@ -52,9 +67,6 @@ mat-card-content {
   grid-template-rows: auto auto auto;
   font-size: 0.9em;
   
-  .align-right {
-    text-align: right;
-  }
 }
 
 .dish__macros > * {
@@ -67,22 +79,74 @@ mat-card-content {
 }
 
 // TODO: combine font-weight for these
-.summary__data-heading-fat {
+.heading-fat {
   font-weight: bold;
   color: $fat-color;
 }
-.summary__data-heading-carbs {
+.heading-carbs {
   font-weight: bold;
   color: $carbs-color;
 }
-.summary__data-heading-protein {
+.heading-protein {
   font-weight: bold;
   color: $protein-color;
 }
-.summary__data-heading-calories {
+.heading-calories {
   font-weight: bold;
   color: $calories-color;
 }
-.summary__data-heading-serving-size {
+.heading-serving-size {
   font-weight: bold;
+}
+
+.breakdown table {
+  width: 100%;
+
+  tr[mat-header-row] {
+    height: 1em;
+  }
+
+  th.align-center {
+    text-align: center;
+  }
+
+  td {
+    font-size: .8em;
+    position:relative;
+  }
+
+  th, td {
+    min-width: 4em;
+
+    &:first-of-type {
+      padding-left:5px;
+    }
+
+    &:last-of-type {
+      padding-right:5px;
+    }
+  }
+
+  .breakdown__percentage-indicator {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 50%;
+
+    &.cal {
+      background: $calories-percentage-indicator-color;
+    }
+
+    &.fat {
+      background: $fat-percentage-indicator-color;
+    }
+
+    &.carbs {
+      background: $carbs-percentage-indicator-color;
+    }
+
+    &.protein {
+      background: $protein-percentage-indicator-color;
+    }
+  }
 }

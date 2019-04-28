@@ -9,6 +9,11 @@ $fat-color: rgb(255, 153, 0);
 $carbs-color: rgb(16, 150, 24);
 $protein-color: rgb(220, 57, 18);
 
+$calories-percentage-indicator-color: rgba(51, 102, 204, .1);
+$fat-percentage-indicator-color: rgba(255, 153, 0, .1);
+$carbs-percentage-indicator-color: rgba(16, 150, 24, .1);
+$protein-percentage-indicator-color: rgba(220, 57, 18, .1);
+
 // main foods list column breakpoints
 $list-page-two-col-bp: 750px;
 $list-page-three-col-bp: 1050px;
