@@ -20,7 +20,7 @@
             <span></span> <!-- col spacer with row border -->
             <span class="align-right">{{ food.fat | number: '1.1-1' }}g</span>
             <span></span> <!-- col spacer with row border -->
-            <span class="align-right">{{ fatCalories | number: '1.1-1' }} cal</span>
+            <span class="align-right">{{ fatCalories | number: '1.1-1' }}&nbsp;cal</span>
             <span></span> <!-- col spacer with row border -->
             <span class="align-right">({{ fatPercentage | number: '1.0-0' }}%)</span>
 
@@ -29,7 +29,7 @@
             <span></span> <!-- col spacer with row border -->
             <span class="align-right">{{ food.carbs | number: '1.1-1' }}g</span>
             <span></span> <!-- col spacer with row border -->
-            <span class="align-right">{{ carbsCalories | number: '1.1-1' }} cal</span>
+            <span class="align-right">{{ carbsCalories | number: '1.1-1' }}&nbsp;cal</span>
             <span></span> <!-- col spacer with row border -->
             <span class="align-right">({{ carbsPercentage | number: '1.0-0' }}%)</span>
 
@@ -38,15 +38,14 @@
             <span></span> <!-- col spacer with row border -->
             <span class="align-right">{{ food.protein | number: '1.1-1' }}g</span>
             <span></span> <!-- col spacer with row border -->
-            <span class="align-right">{{ proteinCalories | number: '1.1-1' }} cal</span>
+            <span class="align-right">{{ proteinCalories | number: '1.1-1' }}&nbsp;cal</span>
             <span></span> <!-- col spacer with row border -->
             <span class="align-right">({{ proteinPercentage | number: '1.0-0' }}%)</span>
           </span>
           <div>
             <div>
-              <span class="food__data-heading-calories">Calories:</span>
-              &nbsp;
-              {{food.calories}}
+              <span class="food__data-heading-calories">Calories:&nbsp;</span>
+              {{ food.calories | number: '1.0-2' }}
             </div>
             <div>
               <span class="food__data-heading-serving-size">Serving Size:</span>
