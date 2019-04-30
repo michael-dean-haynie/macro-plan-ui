@@ -19,7 +19,7 @@ export interface BreakdownIngredient {
     carbsPercentage: number;
     protein: number;
     proteinCalories: number;
-    proteinPercentage: number
+    proteinPercentage: number;
 }
 
 @Component({
@@ -105,30 +105,31 @@ export class DishSummaryCardComponent implements OnInit {
             // protein
             const protein = this.helperDishService.calcIngredientIndividualMacro(ingredient, MacroEnum.PROTEIN);
             const proteinCalories = this.macroService.macroToCalories(protein, MacroEnum.PROTEIN);
-            const proteinPercentage = this.helperDishService.calcIngredientMacroCaloriesPercentage(ingredient, MacroEnum.PROTEIN, this.dish);
+            const proteinPercentage =
+                this.helperDishService.calcIngredientMacroCaloriesPercentage(ingredient, MacroEnum.PROTEIN, this.dish);
 
             const breakdownIngredient: BreakdownIngredient = {
                 name: ingredient.food.name,
-                measurements: [ingredient.measurement],
+                measurement: [ingredient.measurement],
 
                 // calories
                 calories: this.helperDishService.calcIngredientCalories(ingredient),
                 caloriesPercentage: this.helperDishService.calcIngredientCaloriesPercentage(ingredient, this.dish),
 
                 // fat
-                fat: fat,
-                fatCalories: fatCalories,
-                fatPercentage: fatPercentage,
+                fat,
+                fatCalories,
+                fatPercentage,
 
                 // carbs
-                carbs: carbs,
-                carbsCalories: carbsCalories,
-                carbsPercentage: carbsPercentage,
+                carbs,
+                carbsCalories,
+                carbsPercentage,
 
                 // protein
-                protein: protein,
-                proteinCalories: proteinCalories,
-                proteinPercentage: proteinPercentage,
+                protein,
+                proteinCalories,
+                proteinPercentage,
             };
             this.breakdownData.push(breakdownIngredient);
         });

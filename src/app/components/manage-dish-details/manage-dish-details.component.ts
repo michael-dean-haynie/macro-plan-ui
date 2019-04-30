@@ -1,12 +1,14 @@
 import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ReplaySubject } from 'rxjs';
 import { SortDirectionEnum } from 'src/app/enums/sort-direction.enum';
 import { UnitTypeEnum } from 'src/app/enums/unit-type.enum';
 import { Food } from 'src/app/models/api/food.model';
+import { Ingredient } from 'src/app/models/api/ingredient.model';
+import { Measurement } from 'src/app/models/api/measurement.model';
 import { Unit } from 'src/app/models/api/unit.model';
 import { ApiDishService } from 'src/app/services/api-dish.service';
 import { ApiUnitService } from 'src/app/services/api-unit.service';
@@ -109,6 +111,9 @@ export class ManageDishDetailsComponent implements OnInit {
    * User Input
    * ----------------------------------------
    */
+  onClickCancel(): void {
+    this.location.back();
+  }
 
   onClickDeleteDish(): void {
     const dialog = this.dialog.open(DialogComponent, {
@@ -151,6 +156,15 @@ export class ManageDishDetailsComponent implements OnInit {
     unitCtrl.markAsTouched();
   }
 
+  // clear value of unit select and mark touched so validation kicks in
+  onIngredientFoodChange(index: number): void {
+    const unitCtrl = this.dishForm.get(['ingredients', index, 'measurement', 'unitType']);
+    unitCtrl.setValue(null);
+    unitCtrl.markAsTouched();
+
+    this.onIngredientMeasurementUnitTypeChange(index);
+  }
+
   onClickDeleteDishMeasurement(index: number): void {
     const measurementsFormArray = this.dishForm.get('measurements') as FormArray;
     measurementsFormArray.removeAt(index);
@@ -175,6 +189,34 @@ export class ManageDishDetailsComponent implements OnInit {
     measurementsFormArray.markAsTouched();
   }
 
+  onSubmit(): void {
+    if (this.dishForm.valid) {
+      this.populateApiModelWithFormData();
+
+      if (this.createMode) {
+        this.apiDishService.create(this.dish).subscribe(
+          () => {
+            this.snackBarService.showSuccess(`Successfully created "${this.dish.name}"`);
+            this.router.navigate(['manage-dishes']);
+          }, (error) => {
+            this.snackBarService.showError(`Something went wrong. Could not create "${this.dish.name}"`);
+          });
+      } else {
+        this.apiDishService.update(this.dish).subscribe(
+          () => {
+            this.snackBarService.showSuccess(`Successfully updated "${this.dish.name}"`);
+            this.router.navigate(['manage-dishes']);
+          },
+          (error) => {
+            this.snackBarService.showError(`Something went wrong. Could not update "${this.dish.name}"`);
+          });
+      }
+
+    } else {
+      // TODO: let user know
+    }
+  }
+
   /**
    * ----------------------------------------
    * Template rendering logic
@@ -195,6 +237,22 @@ export class ManageDishDetailsComponent implements OnInit {
     return this.helperUnitService.getUnitsOfType(unitType, this.units);
   }
 
+  getUnitTypesForFood(foodId: number): UnitTypeEnum[] {
+    const food = this.foods.find(f => f.id === foodId);
+    if (!food) {
+      return [];
+    }
+    return food.measurements.map(mmt => mmt.unit.unitType);
+  }
+
+  servingSizeSectionHasError(): boolean {
+    return this.shouldShowError(this.dishForm.get('measurements'));
+  }
+
+  ingredientsSectionHasError(): boolean {
+    return this.shouldShowError(this.dishForm.get('ingredients'));
+  }
+
 
   /**
    * ----------------------------------------
@@ -207,7 +265,9 @@ export class ManageDishDetailsComponent implements OnInit {
       this.dishFormBuilt$.subscribe(() => {
         this.dish = this.helperDishService.getEmptyDish();
         this.bindFoodSelectFilterActions();
-        this.loading = false;
+        this.foodsLoaded$.subscribe(() => {
+          this.loading = false;
+        });
       });
     } else {
       this.apiDishService.get(this.dishId).subscribe(
@@ -255,8 +315,46 @@ export class ManageDishDetailsComponent implements OnInit {
         }));
       });
 
-      this.loading = false;
+      this.foodsLoaded$.subscribe(() => {
+        this.loading = false;
+      });
     });
+  }
+
+  private populateApiModelWithFormData(): void {
+    // shorten for readability
+    const d = this.dish;
+    const df = this.dishForm;
+
+    d.name = df.get('name').value;
+
+    // populate dish serving size measurements
+    const apiMmts: Measurement[] = []
+    const formMmts = df.get('measurements') as FormArray;
+    formMmts.controls.forEach(formMmt => {
+      const apiMmt: Measurement = {
+        amount: formMmt.get('amount').value,
+        unit: this.helperUnitService.getUnitModelByEnum(formMmt.get('unit').value, this.units)
+      };
+      apiMmts.push(apiMmt);
+    });
+    d.measurements = apiMmts;
+
+    // populate dish ingredients
+    const apiIngredients: Ingredient[] = [];
+    const formIngredients = df.get('ingredients') as FormArray;
+    formIngredients.controls.forEach(formIngredient => {
+      const apiIngredient: Ingredient = {
+        food: this.foods.find(food => food.id === formIngredient.get('foodId').value),
+        measurement: {
+          amount: formIngredient.get(['measurement', 'amount']).value,
+          unit: this.helperUnitService.getUnitModelByEnum(formIngredient.get(['measurement', 'unit']).value, this.units)
+        },
+        isTemplate: true
+      };
+      apiIngredients.push(apiIngredient);
+    });
+    d.ingredients = apiIngredients;
   }
 
   private buildDefaultFormControls(): void {
@@ -285,15 +383,15 @@ export class ManageDishDetailsComponent implements OnInit {
 
   private buildDefaultMeasurement(): FormGroup {
     return this.fb.group({
-      amount: [1],
-      unitType: [UnitTypeEnum.VOLUME],
-      unit: [UnitEnum.CUP]
+      amount: [null],
+      unitType: [null],
+      unit: [null]
     });
   }
 
   private buildDefaultIngredient(): FormGroup {
     return this.fb.group({
-      foodId: [1],
+      foodId: [null],
       foodFilter: [''],
       measurement: this.buildDefaultMeasurement()
     });
@@ -311,6 +409,10 @@ export class ManageDishDetailsComponent implements OnInit {
 
   private filterFoods(value: string): void {
     this.filteredFoods = this.foods.filter(f => f.name.toLowerCase().includes(value.toLowerCase()));
+  }
+
+  private shouldShowError(ctrl: AbstractControl): boolean {
+    return (!ctrl.valid) && (ctrl.touched);
   }
 
 }

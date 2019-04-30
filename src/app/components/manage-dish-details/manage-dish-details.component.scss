@@ -16,10 +16,7 @@
   margin-top: 1rem;
 
   mat-card-title { 
-    color: rgba(0,0,0,.87);
-    font-weight: 400;
-    font-size: 20px;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
   }
 }
 
@@ -27,7 +24,7 @@
   width: 100%;
 }
 
-.serving-size {
+.serving-size, .ingredient_measurement {
   display: grid;
   grid-template-columns: 6em 9em 1fr 3em;
   grid-column-gap: .5em;
@@ -62,7 +59,48 @@
 }
 
 .add-serving-size-row {
+  padding-top: 16px;
   display:grid;
   justify-items: end;
 }
 
+.ingredient {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+
+  .ingredient__food {
+    // TODO: Instead of mimicing grid-columns and gaps from .serving-size rule, consolidate it
+    display: grid;
+    grid-template-columns: 1fr 3em;
+    grid-column-gap: .5em;
+
+    @media (min-width: 450px) {
+      grid-column-gap: 1em
+    }
+
+    mat-form-field {
+      width: 100%;
+    }
+  }
+
+}
+
+.submit-buttons__container {
+  margin-top: 1rem;
+  display:grid;
+  grid-template-columns: 0 100%;
+
+  @media (min-width: 500px) {
+    grid-template-columns: 1fr 30em;
+  }
+}
+
+.submit-buttons {
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  grid-column-gap: 1em;
+
+  @media (min-width: 500px) {
+    grid-template-columns: auto auto;
+  }
+}
