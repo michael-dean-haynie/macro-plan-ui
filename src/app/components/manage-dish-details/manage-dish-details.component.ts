@@ -187,6 +187,8 @@ export class ManageDishDetailsComponent implements OnInit {
     const measurementsFormArray = this.dishForm.get('ingredients') as FormArray;
     measurementsFormArray.push(this.buildDefaultIngredient());
     measurementsFormArray.markAsTouched();
+
+    this.bindFoodSelectFilterActions();
   }
 
   onSubmit(): void {

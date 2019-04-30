@@ -52,7 +52,7 @@ export class ManageDishesComponent implements OnInit {
   }
 
   onNewButtonClicked(): void {
-    this.router.navigate(['manage-food', 'create']);
+    this.router.navigate(['manage-dishes', 'create']);
   }
 
   private loadDishes(searchTerm: string, activeSortField: string, activeSortDirection: SortDirectionEnum): void {
