@@ -2,25 +2,10 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MacroEnum } from 'src/app/enums/macro.enum';
 import { Dish } from 'src/app/models/api/dish.model';
-import { Measurement } from 'src/app/models/api/measurement.model';
+import { BreakdownItem } from 'src/app/models/breakdown-item.model';
 import { MacroService } from 'src/app/services/macro.service';
+import { BreakdownService } from './../../services/breakdown.service';
 import { HelperDishService } from './../../services/helper-dish.service';
-
-export interface BreakdownIngredient {
-    name: string;
-    measurement: Measurement[];
-    calories: number;
-    caloriesPercentage: number;
-    fat: number;
-    fatCalories: number;
-    fatPercentage: number;
-    carbs: number;
-    carbsCalories: number;
-    carbsPercentage: number;
-    protein: number;
-    proteinCalories: number;
-    proteinPercentage: number;
-}
 
 @Component({
     selector: 'app-dish-summary-card',
@@ -53,12 +38,13 @@ export class DishSummaryCardComponent implements OnInit {
 
     // table
     breakdownColumnsToDisplay = ['name', 'calories', 'fat', 'carbs', 'protein'];
-    breakdownData: BreakdownIngredient[] = [];
+    breakdownData: BreakdownItem[] = [];
 
     constructor(
         private router: Router,
         private helperDishService: HelperDishService,
-        private macroService: MacroService) { }
+        private macroService: MacroService,
+        private breakdownService: BreakdownService) { }
 
     ngOnInit() {
         // run calculations
@@ -91,47 +77,7 @@ export class DishSummaryCardComponent implements OnInit {
 
     private loadBreakdownData(): void {
         this.dish.ingredients.forEach(ingredient => {
-
-            // fat
-            const fat = this.helperDishService.calcIngredientIndividualMacro(ingredient, MacroEnum.FAT);
-            const fatCalories = this.macroService.macroToCalories(fat, MacroEnum.FAT);
-            const fatPercentage = this.helperDishService.calcIngredientMacroCaloriesPercentage(ingredient, MacroEnum.FAT, this.dish);
-
-            // carbs
-            const carbs = this.helperDishService.calcIngredientIndividualMacro(ingredient, MacroEnum.CARBS);
-            const carbsCalories = this.macroService.macroToCalories(carbs, MacroEnum.CARBS);
-            const carbsPercentage = this.helperDishService.calcIngredientMacroCaloriesPercentage(ingredient, MacroEnum.CARBS, this.dish);
-
-            // protein
-            const protein = this.helperDishService.calcIngredientIndividualMacro(ingredient, MacroEnum.PROTEIN);
-            const proteinCalories = this.macroService.macroToCalories(protein, MacroEnum.PROTEIN);
-            const proteinPercentage =
-                this.helperDishService.calcIngredientMacroCaloriesPercentage(ingredient, MacroEnum.PROTEIN, this.dish);
-
-            const breakdownIngredient: BreakdownIngredient = {
-                name: ingredient.food.name,
-                measurement: [ingredient.measurement],
-
-                // calories
-                calories: this.helperDishService.calcIngredientCalories(ingredient),
-                caloriesPercentage: this.helperDishService.calcIngredientCaloriesPercentage(ingredient, this.dish),
-
-                // fat
-                fat,
-                fatCalories,
-                fatPercentage,
-
-                // carbs
-                carbs,
-                carbsCalories,
-                carbsPercentage,
-
-                // protein
-                protein,
-                proteinCalories,
-                proteinPercentage,
-            };
-            this.breakdownData.push(breakdownIngredient);
+            this.breakdownData.push(this.breakdownService.convertIngredientForDish(ingredient, this.dish));
         });
     }
 

@@ -1,0 +1,17 @@
+@import "../../../style-variables.scss";
+
+.plans {
+  display: grid;
+  grid-row-gap: 1rem;
+  grid-column-gap: 1rem;
+
+  // 2 column bp
+  @media (min-width: $list-page-two-col-bp){
+      grid-template-columns: 1fr 1fr;
+  }
+
+  // 3 column bp
+  @media (min-width: $list-page-three-col-bp){
+      grid-template-columns: 1fr 1fr 1fr;
+  }
+}
