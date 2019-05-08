@@ -6,10 +6,15 @@
   color: white;
   width:100%;
   box-sizing: border-box;
-  padding: $top-padding $side-padding $bottom-padding $side-padding;
+  padding: .5rem $side-padding .5rem $side-padding;
   z-index: 2; // <-- if unset or less than 2, mat components float over it on scroll
   display: grid;
   grid-template-columns: 1fr auto;
+
+  @media (min-width: 768px) {
+    padding: $top-padding $side-padding $bottom-padding $side-padding;
+  }
+  
 }
 
 .navigation{
