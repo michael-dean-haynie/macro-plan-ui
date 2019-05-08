@@ -3,13 +3,13 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { SortableField } from 'src/app/models/sortable-field';
 import { environment } from 'src/environments/environment';
-import { SortDirectionEnum } from '../enums/sort-direction.enum';
-import { Dish } from './../models/api/dish.model';
+import { SortDirectionEnum } from '../../enums/sort-direction.enum';
+import { Dish } from '../../models/api/dish.model';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ApiDishService {
+export class DishApiService {
   private baseUrl = `${environment.apiBaseUrl}/dish`;
 
   public dishSortableFields: SortableField[] = [

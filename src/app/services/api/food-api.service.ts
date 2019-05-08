@@ -2,14 +2,14 @@ import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { Food } from '../models/api/food.model';
-import { SortableField } from '../models/sortable-field';
-import { SortDirectionEnum } from './../enums/sort-direction.enum';
+import { SortDirectionEnum } from '../../enums/sort-direction.enum';
+import { Food } from '../../models/api/food.model';
+import { SortableField } from '../../models/sortable-field';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ApiFoodService {
+export class FoodApiService {
   private baseUrl = `${environment.apiBaseUrl}/food`;
 
   public foodSortableFields: SortableField[] = [

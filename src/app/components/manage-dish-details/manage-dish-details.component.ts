@@ -10,13 +10,13 @@ import { Food } from 'src/app/models/api/food.model';
 import { Ingredient } from 'src/app/models/api/ingredient.model';
 import { Measurement } from 'src/app/models/api/measurement.model';
 import { Unit } from 'src/app/models/api/unit.model';
-import { ApiDishService } from 'src/app/services/api-dish.service';
-import { ApiUnitService } from 'src/app/services/api-unit.service';
+import { DishApiService } from 'src/app/services/api/dish-api.service';
+import { UnitApiService } from 'src/app/services/api/unit-api.service';
 import { SnackBarService } from 'src/app/services/snack-bar.service';
+import { FoodApiService } from '../../services/api/food-api.service';
 import { DialogComponent } from '../dialog/dialog.component';
 import { UnitEnum } from './../../enums/unit.enum';
 import { Dish } from './../../models/api/dish.model';
-import { ApiFoodService } from './../../services/api-food.service';
 import { HelperDishService } from './../../services/helper-dish.service';
 import { HelperUnitService } from './../../services/helper-unit.service';
 
@@ -55,9 +55,9 @@ export class ManageDishDetailsComponent implements OnInit {
     private router: Router,
     private location: Location,
     private fb: FormBuilder,
-    private apiFoodService: ApiFoodService,
-    private apiDishService: ApiDishService,
-    private apiUnitService: ApiUnitService,
+    private foodApiService: FoodApiService,
+    private dishApiService: DishApiService,
+    private unitApiService: UnitApiService,
     private helperUnitService: HelperUnitService,
     private helperDishService: HelperDishService,
     private snackBarService: SnackBarService,
@@ -69,7 +69,7 @@ export class ManageDishDetailsComponent implements OnInit {
     this.unitTypes = this.helperUnitService.getUnitTypeEnumList();
 
     // load units
-    this.apiUnitService.getUnits().subscribe(
+    this.unitApiService.getUnits().subscribe(
       units => {
         this.units = units;
         this.unitsLoaded$.next(true); // <-- emit value indicating units are loaded
@@ -94,7 +94,7 @@ export class ManageDishDetailsComponent implements OnInit {
     });
 
     // load foods
-    this.apiFoodService.list('', 'name', SortDirectionEnum.ASC).subscribe(foods => {
+    this.foodApiService.list('', 'name', SortDirectionEnum.ASC).subscribe(foods => {
       this.foods = foods;
       this.filteredFoods = foods;
       this.foodsLoaded$.next(true);
@@ -132,7 +132,7 @@ export class ManageDishDetailsComponent implements OnInit {
   }
 
   onConfirmDeleteDish(): void {
-    this.apiDishService.delete(this.dishId).subscribe(
+    this.dishApiService.delete(this.dishId).subscribe(
       () => {
         this.snackBarService.showSuccess(`Successfully deleted "${this.dish.name}"`);
         this.router.navigate(['manage-dishes']);
@@ -196,7 +196,7 @@ export class ManageDishDetailsComponent implements OnInit {
       this.populateApiModelWithFormData();
 
       if (this.createMode) {
-        this.apiDishService.create(this.dish).subscribe(
+        this.dishApiService.create(this.dish).subscribe(
           () => {
             this.snackBarService.showSuccess(`Successfully created "${this.dish.name}"`);
             this.router.navigate(['manage-dishes']);
@@ -204,7 +204,7 @@ export class ManageDishDetailsComponent implements OnInit {
             this.snackBarService.showError(`Something went wrong. Could not create "${this.dish.name}"`);
           });
       } else {
-        this.apiDishService.update(this.dish).subscribe(
+        this.dishApiService.update(this.dish).subscribe(
           () => {
             this.snackBarService.showSuccess(`Successfully updated "${this.dish.name}"`);
             this.router.navigate(['manage-dishes']);
@@ -272,7 +272,7 @@ export class ManageDishDetailsComponent implements OnInit {
         });
       });
     } else {
-      this.apiDishService.get(this.dishId).subscribe(
+      this.dishApiService.get(this.dishId).subscribe(
         dish => {
           this.dish = dish;
           this.populateFormDataWithApiModel();
@@ -331,7 +331,7 @@ export class ManageDishDetailsComponent implements OnInit {
     d.name = df.get('name').value;
 
     // populate dish serving size measurements
-    const apiMmts: Measurement[] = []
+    const apiMmts: Measurement[] = [];
     const formMmts = df.get('measurements') as FormArray;
     formMmts.controls.forEach(formMmt => {
       const apiMmt: Measurement = {

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Plan } from 'src/app/models/api/plan.model';
-import { ApiPlanService } from './../../services/api-plan.service';
+import { PlanApiService } from '../../services/api/plan-api.service';
 
 @Component({
   selector: 'app-manage-plans',
@@ -14,7 +14,7 @@ export class ManagePlansComponent implements OnInit {
   // loading (will be set to true while searches are being made)
   loading = true;
 
-  constructor(private apiPlanService: ApiPlanService) { }
+  constructor(private planApiService: PlanApiService) { }
 
   ngOnInit() {
     this.loadPlans();
@@ -24,7 +24,7 @@ export class ManagePlansComponent implements OnInit {
     this.plans = [];
     this.loading = true;
 
-    this.apiPlanService.list().subscribe(plans => {
+    this.planApiService.list().subscribe(plans => {
       this.plans = plans;
       this.loading = false;
     });

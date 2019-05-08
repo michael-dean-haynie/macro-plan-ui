@@ -7,11 +7,11 @@ import { ReplaySubject } from 'rxjs';
 import { Food } from 'src/app/models/api/food.model';
 import { Measurement } from 'src/app/models/api/measurement.model';
 import { Unit } from 'src/app/models/api/unit.model';
-import { ApiFoodService } from 'src/app/services/api-food.service';
+import { FoodApiService } from 'src/app/services/api/food-api.service';
 import { HelperUnitService } from 'src/app/services/helper-unit.service';
+import { UnitApiService } from '../../services/api/unit-api.service';
 import { UnitTypeEnum } from './../../enums/unit-type.enum';
 import { UnitEnum } from './../../enums/unit.enum';
-import { ApiUnitService } from './../../services/api-unit.service';
 import { HelperFoodService } from './../../services/helper-food.service';
 import { SnackBarService } from './../../services/snack-bar.service';
 import { DialogComponent } from './../dialog/dialog.component';
@@ -48,8 +48,8 @@ export class ManageFoodDetailsComponent implements OnInit {
     private router: Router,
     private location: Location,
     private fb: FormBuilder,
-    private apiFoodService: ApiFoodService,
-    private apiUnitService: ApiUnitService,
+    private foodApiService: FoodApiService,
+    private unitApiService: UnitApiService,
     private helperUnitService: HelperUnitService,
     private helperFoodService: HelperFoodService,
     private snackBarService: SnackBarService,
@@ -61,7 +61,7 @@ export class ManageFoodDetailsComponent implements OnInit {
     this.unitTypes = this.helperUnitService.getUnitTypeEnumList();
 
     // load units
-    this.apiUnitService.getUnits().subscribe(
+    this.unitApiService.getUnits().subscribe(
       units => {
         this.units = units;
         this.unitsLoaded$.next(true); // <-- emit value indicating units are loaded
@@ -120,7 +120,7 @@ export class ManageFoodDetailsComponent implements OnInit {
   }
 
   onConfirmDeleteFood(): void {
-    this.apiFoodService.delete(this.foodId).subscribe(
+    this.foodApiService.delete(this.foodId).subscribe(
       () => {
         this.snackBarService.showSuccess(`Successfully deleted "${this.food.name}"`);
         this.router.navigate(['manage-food']);
@@ -135,7 +135,7 @@ export class ManageFoodDetailsComponent implements OnInit {
       this.populateApiModelWithFormData();
 
       if (this.createMode) {
-        this.apiFoodService.create(this.food).subscribe(
+        this.foodApiService.create(this.food).subscribe(
           () => {
             this.snackBarService.showSuccess(`Successfully created "${this.food.name}"`);
             this.router.navigate(['manage-food']);
@@ -143,7 +143,7 @@ export class ManageFoodDetailsComponent implements OnInit {
             this.snackBarService.showError(`Something went wrong. Could not create "${this.food.name}"`);
           });
       } else {
-        this.apiFoodService.update(this.food).subscribe(
+        this.foodApiService.update(this.food).subscribe(
           () => {
             this.snackBarService.showSuccess(`Successfully updated "${this.food.name}"`);
             this.router.navigate(['manage-food']);
@@ -227,7 +227,7 @@ export class ManageFoodDetailsComponent implements OnInit {
         this.loading = false;
       });
     } else {
-      this.apiFoodService.get(this.foodId).subscribe(
+      this.foodApiService.get(this.foodId).subscribe(
         food => {
           this.food = food;
           this.populateFormDataWithApiModel();
@@ -279,7 +279,7 @@ export class ManageFoodDetailsComponent implements OnInit {
     f.carbs = ff.get('carbs').value;
     f.protein = ff.get('protein').value;
 
-    const apiMmts: Measurement[] = []
+    const apiMmts: Measurement[] = [];
     const formMmts = ff.get('measurements') as FormArray;
     formMmts.controls.forEach(formMmt => {
       const apiMmt: Measurement = {
