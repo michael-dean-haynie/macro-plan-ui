@@ -1,7 +1,9 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { NavigationEnd, Router } from '@angular/router';
+import { Subject } from 'rxjs';
 import { filter, tap } from 'rxjs/operators';
+import { HeadingService } from './services/heading.service';
 
 export interface NavItem {
   name: string;
@@ -18,6 +20,7 @@ export class AppComponent implements OnInit {
   // heading
   @ViewChild('heading')
   heading: ElementRef;
+  headingText$ = new Subject<string>();
 
   // sidenav
   @ViewChild('sidenav')
@@ -30,7 +33,7 @@ export class AppComponent implements OnInit {
     { name: 'Manage Plans', path: 'manage-plans', active: false }
   ];
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private headingService: HeadingService) { }
 
   ngOnInit() {
     // bind callback that activates nav buttons to router events
@@ -43,6 +46,11 @@ export class AppComponent implements OnInit {
         });
       })
     ).subscribe();
+
+    // bind field to latest emmited value from service
+    this.headingService.headingText$.subscribe(text => {
+      this.headingText$.next(text);
+    });
   }
 
   getHeightOfHeading() {
