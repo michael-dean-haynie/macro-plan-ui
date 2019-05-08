@@ -5,8 +5,8 @@ import { Dish } from 'src/app/models/api/dish.model';
 import { SortableField } from 'src/app/models/sortable-field';
 import { MacroService } from 'src/app/services/macro.service';
 import { DishApiService } from '../../services/api/dish-api.service';
+import { DishHelperService } from '../../services/model-helper/dish-helper.service';
 import { SearchBarValues } from '../search-bar/search-bar.component';
-import { HelperDishService } from './../../services/helper-dish.service';
 import { SnackBarService } from './../../services/snack-bar.service';
 
 @Component({
@@ -33,7 +33,7 @@ export class ManageDishesComponent implements OnInit {
 
   constructor(
     public macroService: MacroService,
-    public helperDishService: HelperDishService,
+    public dishHelperService: DishHelperService,
     private router: Router,
     private dishApiService: DishApiService,
     private snackBarService: SnackBarService) { }

@@ -8,11 +8,11 @@ import { Food } from 'src/app/models/api/food.model';
 import { Measurement } from 'src/app/models/api/measurement.model';
 import { Unit } from 'src/app/models/api/unit.model';
 import { FoodApiService } from 'src/app/services/api/food-api.service';
-import { HelperUnitService } from 'src/app/services/helper-unit.service';
+import { UnitHelperService } from 'src/app/services/model-helper/unit-helper.service';
 import { UnitApiService } from '../../services/api/unit-api.service';
+import { FoodHelperService } from '../../services/model-helper/food-helper.service';
 import { UnitTypeEnum } from './../../enums/unit-type.enum';
 import { UnitEnum } from './../../enums/unit.enum';
-import { HelperFoodService } from './../../services/helper-food.service';
 import { SnackBarService } from './../../services/snack-bar.service';
 import { DialogComponent } from './../dialog/dialog.component';
 
@@ -50,15 +50,15 @@ export class ManageFoodDetailsComponent implements OnInit {
     private fb: FormBuilder,
     private foodApiService: FoodApiService,
     private unitApiService: UnitApiService,
-    private helperUnitService: HelperUnitService,
-    private helperFoodService: HelperFoodService,
+    private unitHelperService: UnitHelperService,
+    private foodHelperService: FoodHelperService,
     private snackBarService: SnackBarService,
     private dialog: MatDialog
   ) { }
 
   ngOnInit() {
     // load unit types
-    this.unitTypes = this.helperUnitService.getUnitTypeEnumList();
+    this.unitTypes = this.unitHelperService.getUnitTypeEnumList();
 
     // load units
     this.unitApiService.getUnits().subscribe(
@@ -190,7 +190,7 @@ export class ManageFoodDetailsComponent implements OnInit {
   }
 
   getUnitsOfType(unitType: UnitTypeEnum): UnitEnum[] {
-    return this.helperUnitService.getUnitsOfType(unitType, this.units);
+    return this.unitHelperService.getUnitsOfType(unitType, this.units);
   }
 
   brandingSectionHasError(): boolean {
@@ -223,7 +223,7 @@ export class ManageFoodDetailsComponent implements OnInit {
   private loadFood(): void {
     if (this.createMode) {
       this.foodFormBuilt$.subscribe(() => {
-        this.food = this.helperFoodService.getEmptyFood();
+        this.food = this.foodHelperService.getEmptyFood();
         this.loading = false;
       });
     } else {
@@ -284,7 +284,7 @@ export class ManageFoodDetailsComponent implements OnInit {
     formMmts.controls.forEach(formMmt => {
       const apiMmt: Measurement = {
         amount: formMmt.get('amount').value,
-        unit: this.helperUnitService.getUnitModelByEnum(formMmt.get('unit').value, this.units)
+        unit: this.unitHelperService.getUnitModelByEnum(formMmt.get('unit').value, this.units)
       };
 
       apiMmts.push(apiMmt);

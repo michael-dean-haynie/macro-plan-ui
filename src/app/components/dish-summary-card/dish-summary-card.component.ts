@@ -4,8 +4,8 @@ import { MacroEnum } from 'src/app/enums/macro.enum';
 import { Dish } from 'src/app/models/api/dish.model';
 import { BreakdownItem } from 'src/app/models/breakdown-item.model';
 import { MacroService } from 'src/app/services/macro.service';
+import { DishHelperService } from '../../services/model-helper/dish-helper.service';
 import { BreakdownService } from './../../services/breakdown.service';
-import { HelperDishService } from './../../services/helper-dish.service';
 
 @Component({
     selector: 'app-dish-summary-card',
@@ -42,24 +42,24 @@ export class DishSummaryCardComponent implements OnInit {
 
     constructor(
         private router: Router,
-        private helperDishService: HelperDishService,
+        private dishHelperService: DishHelperService,
         private macroService: MacroService,
         private breakdownService: BreakdownService) { }
 
     ngOnInit() {
         // run calculations
-        this.calories = this.helperDishService.calcCalories(this.dish);
-        this.fat = this.helperDishService.calcMacro(this.dish, MacroEnum.FAT);
-        this.carbs = this.helperDishService.calcMacro(this.dish, MacroEnum.CARBS);
-        this.protein = this.helperDishService.calcMacro(this.dish, MacroEnum.PROTEIN);
+        this.calories = this.dishHelperService.calcCalories(this.dish);
+        this.fat = this.dishHelperService.calcMacro(this.dish, MacroEnum.FAT);
+        this.carbs = this.dishHelperService.calcMacro(this.dish, MacroEnum.CARBS);
+        this.protein = this.dishHelperService.calcMacro(this.dish, MacroEnum.PROTEIN);
 
         this.fatCalories = this.macroService.macroToCalories(this.fat, MacroEnum.FAT);
         this.carbsCalories = this.macroService.macroToCalories(this.carbs, MacroEnum.CARBS);
         this.proteinCalories = this.macroService.macroToCalories(this.protein, MacroEnum.PROTEIN);
 
-        this.fatPercentage = this.helperDishService.calcMacroPercentage(MacroEnum.FAT, this.dish);
-        this.carbsPercentage = this.helperDishService.calcMacroPercentage(MacroEnum.CARBS, this.dish);
-        this.proteinPercentage = this.helperDishService.calcMacroPercentage(MacroEnum.PROTEIN, this.dish);
+        this.fatPercentage = this.dishHelperService.calcMacroPercentage(MacroEnum.FAT, this.dish);
+        this.carbsPercentage = this.dishHelperService.calcMacroPercentage(MacroEnum.CARBS, this.dish);
+        this.proteinPercentage = this.dishHelperService.calcMacroPercentage(MacroEnum.PROTEIN, this.dish);
 
 
         this.chartData = [

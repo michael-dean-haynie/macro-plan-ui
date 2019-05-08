@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Food } from '../models/api/food.model';
-import { MacroEnum } from './../enums/macro.enum';
-import { MacroService } from './macro.service';
+import { MacroEnum } from '../../enums/macro.enum';
+import { Food } from '../../models/api/food.model';
+import { MacroService } from '../macro.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class HelperFoodService {
+export class FoodHelperService {
 
   constructor(private macroService: MacroService) { }
 

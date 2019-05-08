@@ -2,8 +2,8 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MacroEnum } from 'src/app/enums/macro.enum';
 import { MacroService } from 'src/app/services/macro.service';
+import { FoodHelperService } from '../../services/model-helper/food-helper.service';
 import { Food } from './../../models/api/food.model';
-import { HelperFoodService } from './../../services/helper-food.service';
 
 @Component({
   selector: 'app-food-summary-card',
@@ -33,7 +33,7 @@ export class FoodSummaryCardComponent implements OnInit {
   gramSDFC: number[];
   calSDFC: number[];
 
-  constructor(private router: Router, private macroService: MacroService, private helperFoodService: HelperFoodService) { }
+  constructor(private router: Router, private macroService: MacroService, private foodHelperService: FoodHelperService) { }
 
   ngOnInit() {
     // run calculations
@@ -41,9 +41,9 @@ export class FoodSummaryCardComponent implements OnInit {
     this.carbsCalories = this.macroService.macroToCalories(this.food.carbs, MacroEnum.CARBS);
     this.proteinCalories = this.macroService.macroToCalories(this.food.protein, MacroEnum.PROTEIN);
 
-    this.fatPercentage = this.helperFoodService.getMacroPercentage(MacroEnum.FAT, this.food);
-    this.carbsPercentage = this.helperFoodService.getMacroPercentage(MacroEnum.CARBS, this.food);
-    this.proteinPercentage = this.helperFoodService.getMacroPercentage(MacroEnum.PROTEIN, this.food);
+    this.fatPercentage = this.foodHelperService.getMacroPercentage(MacroEnum.FAT, this.food);
+    this.carbsPercentage = this.foodHelperService.getMacroPercentage(MacroEnum.CARBS, this.food);
+    this.proteinPercentage = this.foodHelperService.getMacroPercentage(MacroEnum.PROTEIN, this.food);
 
     this.chartData = [
       ['Fat', this.fatCalories],

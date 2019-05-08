@@ -14,11 +14,11 @@ import { DishApiService } from 'src/app/services/api/dish-api.service';
 import { UnitApiService } from 'src/app/services/api/unit-api.service';
 import { SnackBarService } from 'src/app/services/snack-bar.service';
 import { FoodApiService } from '../../services/api/food-api.service';
+import { DishHelperService } from '../../services/model-helper/dish-helper.service';
+import { UnitHelperService } from '../../services/model-helper/unit-helper.service';
 import { DialogComponent } from '../dialog/dialog.component';
 import { UnitEnum } from './../../enums/unit.enum';
 import { Dish } from './../../models/api/dish.model';
-import { HelperDishService } from './../../services/helper-dish.service';
-import { HelperUnitService } from './../../services/helper-unit.service';
 
 @Component({
   selector: 'app-manage-dish-details',
@@ -58,15 +58,15 @@ export class ManageDishDetailsComponent implements OnInit {
     private foodApiService: FoodApiService,
     private dishApiService: DishApiService,
     private unitApiService: UnitApiService,
-    private helperUnitService: HelperUnitService,
-    private helperDishService: HelperDishService,
+    private unitHelperService: UnitHelperService,
+    private dishHelperService: DishHelperService,
     private snackBarService: SnackBarService,
     private dialog: MatDialog
   ) { }
 
   ngOnInit() {
     // load unit types
-    this.unitTypes = this.helperUnitService.getUnitTypeEnumList();
+    this.unitTypes = this.unitHelperService.getUnitTypeEnumList();
 
     // load units
     this.unitApiService.getUnits().subscribe(
@@ -236,7 +236,7 @@ export class ManageDishDetailsComponent implements OnInit {
   }
 
   getUnitsOfType(unitType: UnitTypeEnum): UnitEnum[] {
-    return this.helperUnitService.getUnitsOfType(unitType, this.units);
+    return this.unitHelperService.getUnitsOfType(unitType, this.units);
   }
 
   getUnitTypesForFood(foodId: number): UnitTypeEnum[] {
@@ -265,7 +265,7 @@ export class ManageDishDetailsComponent implements OnInit {
   private loadDish(): void {
     if (this.createMode) {
       this.dishFormBuilt$.subscribe(() => {
-        this.dish = this.helperDishService.getEmptyDish();
+        this.dish = this.dishHelperService.getEmptyDish();
         this.bindFoodSelectFilterActions();
         this.foodsLoaded$.subscribe(() => {
           this.loading = false;
@@ -336,7 +336,7 @@ export class ManageDishDetailsComponent implements OnInit {
     formMmts.controls.forEach(formMmt => {
       const apiMmt: Measurement = {
         amount: formMmt.get('amount').value,
-        unit: this.helperUnitService.getUnitModelByEnum(formMmt.get('unit').value, this.units)
+        unit: this.unitHelperService.getUnitModelByEnum(formMmt.get('unit').value, this.units)
       };
       apiMmts.push(apiMmt);
     });
@@ -350,7 +350,7 @@ export class ManageDishDetailsComponent implements OnInit {
         food: this.foods.find(food => food.id === formIngredient.get('foodId').value),
         measurement: {
           amount: formIngredient.get(['measurement', 'amount']).value,
-          unit: this.helperUnitService.getUnitModelByEnum(formIngredient.get(['measurement', 'unit']).value, this.units)
+          unit: this.unitHelperService.getUnitModelByEnum(formIngredient.get(['measurement', 'unit']).value, this.units)
         },
         isTemplate: true
       };

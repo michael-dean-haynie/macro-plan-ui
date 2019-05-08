@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
+import { PlanHelperService } from './plan-helper.service';
 
-import { HelperDishService } from './helper-dish.service';
 
-describe('HelperDishService', () => {
+describe('PlanHelperService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: HelperDishService = TestBed.get(HelperDishService);
+    const service: PlanHelperService = TestBed.get(PlanHelperService);
     expect(service).toBeTruthy();
   });
 });

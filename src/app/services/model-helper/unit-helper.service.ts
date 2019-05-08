@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Unit } from 'src/app/models/api/unit.model';
-import { UnitEnum } from '../enums/unit.enum';
-import { UnitTypeEnum } from './../enums/unit-type.enum';
+import { UnitTypeEnum } from '../../enums/unit-type.enum';
+import { UnitEnum } from '../../enums/unit.enum';
 
 @Injectable({
   providedIn: 'root'
 })
-export class HelperUnitService {
+export class UnitHelperService {
 
   constructor() { }
 

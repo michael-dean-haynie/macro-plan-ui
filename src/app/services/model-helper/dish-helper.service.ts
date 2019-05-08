@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
-import { Dish } from '../models/api/dish.model';
-import { Ingredient } from '../models/api/ingredient.model';
-import { MacroEnum } from './../enums/macro.enum';
-import { HelperFoodService } from './helper-food.service';
-import { MacroService } from './macro.service';
+import { MacroEnum } from '../../enums/macro.enum';
+import { Dish } from '../../models/api/dish.model';
+import { Ingredient } from '../../models/api/ingredient.model';
+import { MacroService } from '../macro.service';
+import { FoodHelperService } from './food-helper.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class HelperDishService {
+export class DishHelperService {
 
-  constructor(private macroService: MacroService, private helperFoodService: HelperFoodService) { }
+  constructor(private macroService: MacroService, private foodHelperService: FoodHelperService) { }
 
   public getEmptyDish(): Dish {
     return {
@@ -93,7 +93,7 @@ export class HelperDishService {
    */
   public calcIngredientIndividualMacro(ingredient: Ingredient, macro: MacroEnum) {
 
-    const macroServingSize: number = this.helperFoodService.getMacro(ingredient.food, macro);
+    const macroServingSize: number = this.foodHelperService.getMacro(ingredient.food, macro);
     const ingredientAmount = ingredient.measurement.amount;
     const ingredientRatio = ingredient.measurement.unit.unitTypeRatio;
     const compatibleServingSize = ingredient.food.measurements.find(foodMmt =>

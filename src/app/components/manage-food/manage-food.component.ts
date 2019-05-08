@@ -4,8 +4,8 @@ import { SortDirectionEnum } from 'src/app/enums/sort-direction.enum';
 import { Food } from 'src/app/models/api/food.model';
 import { SortableField } from '../../models/sortable-field';
 import { FoodApiService } from '../../services/api/food-api.service';
+import { FoodHelperService } from '../../services/model-helper/food-helper.service';
 import { SearchBarValues } from '../search-bar/search-bar.component';
-import { HelperFoodService } from './../../services/helper-food.service';
 import { MacroService } from './../../services/macro.service';
 import { SnackBarService } from './../../services/snack-bar.service';
 
@@ -35,7 +35,7 @@ export class ManageFoodComponent implements OnInit {
     public macroService: MacroService,
     private router: Router,
     private foodApiService: FoodApiService,
-    private helperFoodService: HelperFoodService,
+    private foodHelperService: FoodHelperService,
     private snackBarService: SnackBarService
   ) { }
 

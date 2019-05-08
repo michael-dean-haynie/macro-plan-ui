@@ -1,18 +1,21 @@
 import { Injectable } from '@angular/core';
 import { MacroService } from 'src/app/services/macro.service';
-import { MacroEnum } from '../enums/macro.enum';
-import { Ingredient } from '../models/api/ingredient.model';
-import { Plan } from '../models/api/plan.model';
-import { Plate } from '../models/api/plate.model';
-import { HelperDishService } from './helper-dish.service';
-import { HelperFoodService } from './helper-food.service';
+import { MacroEnum } from '../../enums/macro.enum';
+import { Ingredient } from '../../models/api/ingredient.model';
+import { Plan } from '../../models/api/plan.model';
+import { Plate } from '../../models/api/plate.model';
+import { DishHelperService } from './dish-helper.service';
+import { FoodHelperService } from './food-helper.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class HelperPlanService {
+export class PlanHelperService {
 
-  constructor(private helperDishService: HelperDishService, private helperFoodService: HelperFoodService, private macroService: MacroService) { }
+  constructor(
+    private dishHelperService: DishHelperService,
+    private foodHelperService: FoodHelperService,
+    private macroService: MacroService) { }
 
   /**
    * Calculate the total calories in a plan
@@ -24,7 +27,7 @@ export class HelperPlanService {
       .reduce((caloriesSum, plateCalories) => caloriesSum + plateCalories);
 
     const ingredientCals = plan.ingredients
-      .map<number>(ingredient => this.helperDishService.calcIngredientCalories(ingredient))
+      .map<number>(ingredient => this.dishHelperService.calcIngredientCalories(ingredient))
       .reduce((caloriesSum, ingredientCalories) => caloriesSum + ingredientCalories);
 
     return plateCals + ingredientCals;
@@ -53,7 +56,7 @@ export class HelperPlanService {
    * @param plan the plan
    */
   public calcIngredientCaloriesPercentage(ingredient: Ingredient, plan: Plan): number {
-    return 100 * this.helperDishService.calcIngredientCalories(ingredient) / this.calcCalories(plan);
+    return 100 * this.dishHelperService.calcIngredientCalories(ingredient) / this.calcCalories(plan);
   }
 
   /**
@@ -95,7 +98,7 @@ export class HelperPlanService {
    * @param macro the macro nutrient
    */
   public calcGramsOfMacroInPlate(plate: Plate, macro: MacroEnum): number {
-    return this.helperDishService.calcMacro(plate.dish, macro) * this.calcPlateAmountToDishServingSizeRatio(plate);
+    return this.dishHelperService.calcMacro(plate.dish, macro) * this.calcPlateAmountToDishServingSizeRatio(plate);
   }
 
   /**
@@ -104,7 +107,7 @@ export class HelperPlanService {
    * @param macro the macro nutrient
    */
   public calcGramsOfMacroInIngredient(ingredient: Ingredient, macro: MacroEnum): number {
-    return this.helperFoodService.getMacro(ingredient.food, macro) * this.calcIngredientAmountToFoodServingSizeRatio(ingredient);
+    return this.foodHelperService.getMacro(ingredient.food, macro) * this.calcIngredientAmountToFoodServingSizeRatio(ingredient);
   }
 
 
@@ -113,7 +116,7 @@ export class HelperPlanService {
    * @param plate the plate
    */
   public calcPlateCalories(plate: Plate): number {
-    const calsIn1DishServing = this.helperDishService.calcCalories(plate.dish);
+    const calsIn1DishServing = this.dishHelperService.calcCalories(plate.dish);
     return calsIn1DishServing * this.calcPlateAmountToDishServingSizeRatio(plate);
   }
 
@@ -121,9 +124,9 @@ export class HelperPlanService {
    * Calculates the ratio between the plate amount (how much of the dish is being served) and the dish serving size.
    * This ratio abstraction is useful for getting the number of calories for a plate
    * because a plate is really an amount of a dish.
-   * 
+   *
    * Handles unit conversion too.
-   * 
+   *
    * Very similar to  calcIngredientAmountToFoodServingSizeRatio()
    * @param plate the plate for which the ratio will be used
    */
@@ -140,9 +143,9 @@ export class HelperPlanService {
    * Calculates the ratio between the ingredient amount (how much of the food is being served) and the food serving size.
    * This ratio abstraction is useful for getting the number of a grams for a particular macro for an ingredient
    * because an ingredient is really an amount of a food.
-   * 
+   *
    * Handles unit conversion too.
-   * 
+   *
    * Very similar to  calcPlateAmountToDishServingSizeRatio()
    * @param plate the plate for which the ratio will be used
    */
