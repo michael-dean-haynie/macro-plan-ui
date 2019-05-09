@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Plan } from 'src/app/models/api/plan.model';
 import { PlanApiService } from '../../services/api/plan-api.service';
+import { HeadingService } from './../../services/heading.service';
 
 @Component({
   selector: 'app-manage-plans',
@@ -14,9 +15,15 @@ export class ManagePlansComponent implements OnInit {
   // loading (will be set to true while searches are being made)
   loading = true;
 
-  constructor(private planApiService: PlanApiService) { }
+  constructor(
+    private planApiService: PlanApiService,
+    private headingService: HeadingService
+  ) { }
 
   ngOnInit() {
+    // Set heading text
+    this.headingService.setHeadingText('Manage Plans');
+
     this.loadPlans();
   }
 

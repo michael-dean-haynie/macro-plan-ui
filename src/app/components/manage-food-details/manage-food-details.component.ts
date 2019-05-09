@@ -13,6 +13,7 @@ import { UnitApiService } from '../../services/api/unit-api.service';
 import { FoodHelperService } from '../../services/model-helper/food-helper.service';
 import { UnitTypeEnum } from './../../enums/unit-type.enum';
 import { UnitEnum } from './../../enums/unit.enum';
+import { HeadingService } from './../../services/heading.service';
 import { SnackBarService } from './../../services/snack-bar.service';
 import { DialogComponent } from './../dialog/dialog.component';
 
@@ -53,10 +54,14 @@ export class ManageFoodDetailsComponent implements OnInit {
     private unitHelperService: UnitHelperService,
     private foodHelperService: FoodHelperService,
     private snackBarService: SnackBarService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private headingService: HeadingService
   ) { }
 
   ngOnInit() {
+    // Set heading text
+    this.headingService.setHeadingText('Manage Food');
+
     // load unit types
     this.unitTypes = this.unitHelperService.getUnitTypeEnumList();
 

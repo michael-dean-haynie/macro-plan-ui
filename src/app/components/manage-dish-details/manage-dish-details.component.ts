@@ -19,6 +19,7 @@ import { UnitHelperService } from '../../services/model-helper/unit-helper.servi
 import { DialogComponent } from '../dialog/dialog.component';
 import { UnitEnum } from './../../enums/unit.enum';
 import { Dish } from './../../models/api/dish.model';
+import { HeadingService } from './../../services/heading.service';
 
 @Component({
   selector: 'app-manage-dish-details',
@@ -61,10 +62,14 @@ export class ManageDishDetailsComponent implements OnInit {
     private unitHelperService: UnitHelperService,
     private dishHelperService: DishHelperService,
     private snackBarService: SnackBarService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private headingService: HeadingService
   ) { }
 
   ngOnInit() {
+    // Set heading text
+    this.headingService.setHeadingText('Manage Dishes');
+
     // load unit types
     this.unitTypes = this.unitHelperService.getUnitTypeEnumList();
 

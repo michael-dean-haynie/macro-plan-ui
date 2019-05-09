@@ -12,6 +12,6 @@ export class HeadingService {
   }
 
   public setHeadingText(text: string): void {
-    this.headingText$.next('');
+    this.headingText$.next(text);
   }
 }

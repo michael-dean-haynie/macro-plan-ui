@@ -7,6 +7,7 @@ import { MacroService } from 'src/app/services/macro.service';
 import { DishApiService } from '../../services/api/dish-api.service';
 import { DishHelperService } from '../../services/model-helper/dish-helper.service';
 import { SearchBarValues } from '../search-bar/search-bar.component';
+import { HeadingService } from './../../services/heading.service';
 import { SnackBarService } from './../../services/snack-bar.service';
 
 @Component({
@@ -36,9 +37,13 @@ export class ManageDishesComponent implements OnInit {
     public dishHelperService: DishHelperService,
     private router: Router,
     private dishApiService: DishApiService,
-    private snackBarService: SnackBarService) { }
+    private snackBarService: SnackBarService,
+    private headingService: HeadingService) { }
 
   ngOnInit() {
+    // Set heading text
+    this.headingService.setHeadingText('Manage Dishes');
+
     // Store sortable fields on dish (after sorting alpha asc)
     this.sortableFields = this.dishApiService.dishSortableFields
       .sort((a, b) => a.displayName.toLowerCase().localeCompare(b.displayName.toLocaleLowerCase()));

@@ -1,7 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { NavigationEnd, Router } from '@angular/router';
-import { Subject } from 'rxjs';
 import { filter, tap } from 'rxjs/operators';
 import { HeadingService } from './services/heading.service';
 
@@ -20,7 +19,7 @@ export class AppComponent implements OnInit {
   // heading
   @ViewChild('heading')
   heading: ElementRef;
-  headingText$ = new Subject<string>();
+  headingText: string;
 
   // sidenav
   @ViewChild('sidenav')
@@ -49,7 +48,7 @@ export class AppComponent implements OnInit {
 
     // bind field to latest emmited value from service
     this.headingService.headingText$.subscribe(text => {
-      this.headingText$.next(text);
+      this.headingText = text;
     });
   }
 
