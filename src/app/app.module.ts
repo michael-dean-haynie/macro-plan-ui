@@ -29,11 +29,12 @@ import { ManageDishDetailsComponent } from './components/manage-dish-details/man
 import { ManageDishesComponent } from './components/manage-dishes/manage-dishes.component';
 import { ManageFoodDetailsComponent } from './components/manage-food-details/manage-food-details.component';
 import { ManageFoodComponent } from './components/manage-food/manage-food.component';
+import { ManagePlanDetailsComponent } from './components/manage-plan-details/manage-plan-details.component';
 import { ManagePlansComponent } from './components/manage-plans/manage-plans.component';
+import { PlanSummaryCardComponent } from './components/plan-summary-card/plan-summary-card.component';
 import { SearchBarComponent } from './components/search-bar/search-bar.component';
 import { MeasurementsPipe } from './pipes/measurements.pipe';
 import { MainInterceptor } from './services/interceptors/main.interceptor';
-import { PlanSummaryCardComponent } from './components/plan-summary-card/plan-summary-card.component';
 
 
 
@@ -53,9 +54,9 @@ const appRoutes: Routes = [
   {
     path: 'manage-plans', component: ManagePlansComponent
   },
-  // {
-  //   path: 'manage-plans/:id', component: ManagePlanDetailsComponent
-  // },
+  {
+    path: 'manage-plans/:id', component: ManagePlanDetailsComponent
+  },
   {
     path: '',
     redirectTo: '/manage-food',
@@ -82,7 +83,8 @@ const appRoutes: Routes = [
     DishSummaryCardComponent,
     ManageDishDetailsComponent,
     ManagePlansComponent,
-    PlanSummaryCardComponent
+    PlanSummaryCardComponent,
+    ManagePlanDetailsComponent
   ],
   imports: [
     BrowserModule,

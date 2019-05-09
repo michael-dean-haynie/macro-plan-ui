@@ -4,10 +4,6 @@
 
 <div class="plans">
   <ng-container *ngFor="let plan of plans">
-    <!-- <div>Calories: {{plan.calories}}</div>
-    <div>Fat: {{plan.fat}}</div>
-    <div>Carbs: {{plan.carbs}}</div>
-    <div>Protein: {{plan.protein}}</div> -->
-    <app-plan-summary-card [plan]="plan"></app-plan-summary-card>
+    <app-plan-summary-card [plan]="plan" (click)="onNewButtonClicked()"></app-plan-summary-card>
   </ng-container>
 </div>

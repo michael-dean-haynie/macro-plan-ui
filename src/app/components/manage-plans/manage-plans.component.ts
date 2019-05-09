@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Plan } from 'src/app/models/api/plan.model';
 import { PlanApiService } from '../../services/api/plan-api.service';
 import { HeadingService } from './../../services/heading.service';
@@ -16,6 +17,7 @@ export class ManagePlansComponent implements OnInit {
   loading = true;
 
   constructor(
+    private router: Router,
     private planApiService: PlanApiService,
     private headingService: HeadingService
   ) { }
@@ -25,6 +27,10 @@ export class ManagePlansComponent implements OnInit {
     this.headingService.setHeadingText('Manage Plans');
 
     this.loadPlans();
+  }
+
+  onNewButtonClicked(): void {
+    this.router.navigate(['manage-plans', 'create']);
   }
 
   private loadPlans(): void {
