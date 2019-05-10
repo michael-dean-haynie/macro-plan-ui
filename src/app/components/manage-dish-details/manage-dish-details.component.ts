@@ -88,11 +88,11 @@ export class ManageDishDetailsComponent implements OnInit {
     });
 
     // load dish id
-    this.route.params.subscribe(params => {
-      if (params['id'] === 'create') {
+    this.route.paramMap.subscribe(paramMap => {
+      if (paramMap.get('id') === 'create') {
         this.createMode = true;
       } else {
-        this.dishId = +params['id']; // <-- convert to number
+        this.dishId = +paramMap.get('id'); // <-- convert to number
       }
 
       this.idLoaded$.next(true); // <-- emit value indicating id has been

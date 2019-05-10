@@ -80,11 +80,11 @@ export class ManageFoodDetailsComponent implements OnInit {
     });
 
     // load food id
-    this.route.params.subscribe(params => {
-      if (params['id'] === 'create') {
+    this.route.paramMap.subscribe(paramMap => {
+      if (paramMap.get('id') === 'create') {
         this.createMode = true;
       } else {
-        this.foodId = +params['id']; // <-- convert to number
+        this.foodId = +paramMap.get('id'); // <-- convert to number
       }
 
       this.idLoaded$.next(true); // <-- emit value indicating id has been

@@ -1,6 +1,14 @@
-<p>
-  manage-plan-details works!
-</p>
-<p>
-  Content is {{loading ? 'still' : 'finished'}} loading.
-</p>
+<div *ngIf="loading" class="loading-container">
+  <mat-spinner></mat-spinner>
+</div>
+
+<ng-container *ngIf="!loading">
+  <div class="title-bar">
+    <h2>{{createMode ? 'New' : 'Edit' }} Plan</h2>
+    <button *ngIf="!createMode" mat-raised-button color="warn" type="button"
+      (click)="onClickDeletePlan()">Delete</button>
+  </div>
+
+  <form [formGroup]="planForm" (ngSubmit)="onSubmit()">
+  </form>
+</ng-container>
