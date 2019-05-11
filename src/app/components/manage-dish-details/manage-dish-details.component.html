@@ -96,7 +96,7 @@
                           </ngx-mat-select-search>
                         </mat-option>
                         <mat-option *ngFor="let food of filteredFoods" [value]="food.id">
-                          {{food.name}}
+                          {{getDropdownLabelForFood(food)}}
                         </mat-option>
                       </mat-select>
                     </mat-form-field>

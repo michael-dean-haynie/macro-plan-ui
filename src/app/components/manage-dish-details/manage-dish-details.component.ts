@@ -260,6 +260,12 @@ export class ManageDishDetailsComponent implements OnInit {
     return this.shouldShowError(this.dishForm.get('ingredients'));
   }
 
+  getDropdownLabelForFood(food: Food): string {
+    return `${food.name}` +
+      `${food.styleOrFlavor ? ' - ' + food.styleOrFlavor : ''}` +
+      `${food.brand ? ' (' + food.brand + ')' : ''}`;
+  }
+
 
   /**
    * ----------------------------------------
@@ -415,7 +421,15 @@ export class ManageDishDetailsComponent implements OnInit {
   }
 
   private filterFoods(value: string): void {
-    this.filteredFoods = this.foods.filter(f => f.name.toLowerCase().includes(value.toLowerCase()));
+    this.filteredFoods = this.foods.filter(food =>
+      this.valueInField(value, food.name) ||
+      this.valueInField(value, food.styleOrFlavor) ||
+      this.valueInField(value, food.brand)
+    );
+  }
+
+  private valueInField(value: string, fieldValue: string): boolean {
+    return fieldValue && fieldValue.toLowerCase().includes(value.toLowerCase());
   }
 
   private shouldShowError(ctrl: AbstractControl): boolean {
