@@ -1,11 +1,13 @@
 import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin, ReplaySubject } from 'rxjs';
 import { first } from 'rxjs/operators';
 import { Plan } from 'src/app/models/api/plan.model';
 import { SnackBarService } from 'src/app/services/snack-bar.service';
+import { DialogComponent } from '../dialog/dialog.component';
 import { PlanApiService } from './../../services/api/plan-api.service';
 import { HeadingService } from './../../services/heading.service';
 import { PlanHelperService } from './../../services/model-helper/plan-helper.service';
@@ -39,7 +41,8 @@ export class ManagePlanDetailsComponent implements OnInit {
     private planHelperService: PlanHelperService,
     private fb: FormBuilder,
     private snackBarService: SnackBarService,
-    private location: Location
+    private location: Location,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit() {
@@ -85,7 +88,30 @@ export class ManagePlanDetailsComponent implements OnInit {
    * ----------------------------------------
    */
   onClickDeletePlan(): void {
-    // TODO
+    const dialog = this.dialog.open(DialogComponent, {
+      data: {
+        title: `Delete plan?`,
+        content: 'This action cannot be undone.',
+        cancel: 'Nevermind',
+        confirm: 'Yes, Delete'
+      }
+    });
+    dialog.afterClosed().subscribe(doDelete => {
+      if (doDelete) {
+        this.onConfirmDeletePlan();
+      }
+    });
+  }
+
+  onConfirmDeletePlan(): void {
+    this.planApiService.delete(this.planId).subscribe(
+      () => {
+        this.snackBarService.showSuccess(`Successfully deleted plan`);
+        this.router.navigate(['manage-plans']);
+      },
+      (error) => {
+        this.snackBarService.showError(`Something went wrong. Could not delete plan.`);
+      });
   }
 
   onClickCancel(): void {
