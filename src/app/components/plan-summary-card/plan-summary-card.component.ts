@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { MacroEnum } from 'src/app/enums/macro.enum';
 import { Plan } from 'src/app/models/api/plan.model';
 import { BreakdownItem } from 'src/app/models/breakdown-item.model';
@@ -24,7 +25,11 @@ export class PlanSummaryCardComponent implements OnInit {
   breakdownColumnsToDisplay = ['name', 'calories', 'fat', 'carbs', 'protein'];
   breakdownData: BreakdownItem[] = [];
 
-  constructor(private planHelperService: PlanHelperService, private breakdownService: BreakdownService) { }
+  constructor(
+    private planHelperService: PlanHelperService,
+    private breakdownService: BreakdownService,
+    private router: Router
+  ) { }
 
   ngOnInit() {
     // calculate macros
@@ -34,6 +39,10 @@ export class PlanSummaryCardComponent implements OnInit {
     this.planProtein = this.planHelperService.calcIndividualMacro(this.plan, MacroEnum.PROTEIN);
 
     this.loadBreakdownData();
+  }
+
+  onPlanSelected(id: number): void {
+    this.router.navigate(['manage-plans', id]);
   }
 
   private loadBreakdownData(): void {

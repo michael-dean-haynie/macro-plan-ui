@@ -17,6 +17,19 @@ export class PlanHelperService {
     private foodHelperService: FoodHelperService,
     private macroService: MacroService) { }
 
+  public getEmptyPlan(): Plan {
+    return {
+      id: null,
+      calories: null,
+      fat: null,
+      carbs: null,
+      protein: null,
+      ingredients: null,
+      plates: null,
+      isTemplate: true
+    };
+  }
+
   /**
    * Calculate the total calories in a plan
    * @param plan the plan
