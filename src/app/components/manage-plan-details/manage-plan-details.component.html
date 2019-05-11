@@ -10,6 +10,8 @@
   </div>
 
   <form [formGroup]="planForm" (ngSubmit)="onSubmit()">
+
+    <!-- Target Macros -->
     <mat-card>
       <mat-card-content>
         <mat-form-field>
@@ -26,6 +28,88 @@
         </mat-form-field>
       </mat-card-content>
     </mat-card>
+
+    <!-- Plan Items -->
+    <mat-card>
+      <mat-card-title [class.error]="planItemsSectionHasError()">Items</mat-card-title>
+
+      <mat-card-content>
+        <ng-container formArrayName="planItems">
+          <ng-container *ngFor="let planItemFg of getPlanItemsFormGroups(); let i=index;">
+            <ng-container [formGroupName]="i">
+
+              <mat-divider></mat-divider>
+              <div class="plan-item">
+
+                <div class="plan-item__item">
+                  <mat-form-field>
+                    <mat-select formControlName="id" placeholder="Item" #singleSelect
+                      (selectionChange)="onPlanItemChange(i)">
+                      <mat-option>
+                        <ngx-mat-select-search formControlName="filter" [placeholderLabel]="'Search'"
+                          [noEntriesFoundLabel]="'No entries found'">
+                        </ngx-mat-select-search>
+                      </mat-option>
+                      <mat-option *ngFor="let planItem of filteredPlanItems" [value]="planItem.id">
+                        {{getDropdownLabelForPlanItem(planItem)}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+
+
+                <div class="plan-item__measurement">
+                  <ng-container [formGroupName]="'measurement'">
+                    <mat-form-field>
+                      <mat-label>Unit Type</mat-label>
+                      <mat-select formControlName="unitType" (selectionChange)="onPlanItemMeasurementUnitTypeChange(i)"
+                        required>
+                        <!-- TODO: Only allow unit types that the food template (or dish template) has measurements for -->
+                        <mat-option *ngFor=" let unitType of getUnitTypesForPlanItem(i)" [value]="unitType">
+                          <!-- TODO: make a pipe that pretty prints const notation strings -->
+                          {{unitType}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field>
+                      <mat-label>Unit</mat-label>
+                      <mat-select formControlName="unit" required>
+                        <mat-option
+                          *ngFor="let unit of getUnitsOfType(planItemFg.controls['measurement'].controls['unitType'].value)"
+                          [value]="unit">
+                          {{unit}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+
+
+                    <mat-form-field>
+                      <input matInput type="number" placeholder="Ammount" formControlName="amount" required>
+                    </mat-form-field>
+
+
+                    <button mat-icon-button type="button" (click)="onClickDeletePlanItem(i)">
+                      <i class="material-icons">delete_outline</i>
+                    </button>
+
+                  </ng-container>
+                </div>
+
+              </div>
+              <mat-divider *ngIf="i === getPlanItemsFormGroups().length -1"></mat-divider>
+            </ng-container>
+          </ng-container>
+
+          <div class="add-serving-size-row">
+            <button mat-mini-fab color="primary" type="button" (click)="onClickAddPlanItem()">
+              <i class="material-icons">add</i>
+            </button>
+          </div>
+        </ng-container>
+      </mat-card-content>
+    </mat-card>
+
 
     <!-- Submit / Cancel -->
     <div class="submit-buttons__container">

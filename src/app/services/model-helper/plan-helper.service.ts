@@ -37,11 +37,11 @@ export class PlanHelperService {
   public calcCalories(plan: Plan): number {
     const plateCals = plan.plates
       .map<number>(plate => this.calcPlateCalories(plate))
-      .reduce((caloriesSum, plateCalories) => caloriesSum + plateCalories);
+      .reduce((caloriesSum, plateCalories) => caloriesSum + plateCalories, 0);
 
     const ingredientCals = plan.ingredients
       .map<number>(ingredient => this.dishHelperService.calcIngredientCalories(ingredient))
-      .reduce((caloriesSum, ingredientCalories) => caloriesSum + ingredientCalories);
+      .reduce((caloriesSum, ingredientCalories) => caloriesSum + ingredientCalories, 0);
 
     return plateCals + ingredientCals;
   }
@@ -54,11 +54,11 @@ export class PlanHelperService {
   public calcIndividualMacro(plan: Plan, macro: MacroEnum) {
     const gramsFromPlates = plan.plates
       .map<number>(plate => this.calcGramsOfMacroInPlate(plate, macro))
-      .reduce((gramsSum, plateGrams) => gramsSum + plateGrams);
+      .reduce((gramsSum, plateGrams) => gramsSum + plateGrams, 0);
 
     const gramsFromIngredients = plan.ingredients
       .map<number>(ingredient => this.calcGramsOfMacroInIngredient(ingredient, macro))
-      .reduce((gramsSum, ingredientGrams) => gramsSum + ingredientGrams);
+      .reduce((gramsSum, ingredientGrams) => gramsSum + ingredientGrams, 0);
 
     return gramsFromPlates + gramsFromIngredients;
   }

@@ -24,7 +24,7 @@
   width: 100%;
 }
 
-.serving-size, .ingredient_measurement {
+.serving-size, .ingredient__measurement {
   display: grid;
   grid-template-columns: 6em 9em 1fr 3em;
   grid-column-gap: .5em;
